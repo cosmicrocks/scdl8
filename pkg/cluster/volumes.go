@@ -11,12 +11,12 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/aws/aws-sdk-go/aws"
-	acidv1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	"github.com/zalando/postgres-operator/pkg/spec"
-	"github.com/zalando/postgres-operator/pkg/util"
-	"github.com/zalando/postgres-operator/pkg/util/constants"
-	"github.com/zalando/postgres-operator/pkg/util/filesystems"
-	"github.com/zalando/postgres-operator/pkg/util/volumes"
+	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
+	"github.com/cosmicrocks/scdl8/pkg/util"
+	"github.com/cosmicrocks/scdl8/pkg/util/constants"
+	"github.com/cosmicrocks/scdl8/pkg/util/filesystems"
+	"github.com/cosmicrocks/scdl8/pkg/util/volumes"
 )
 
 func (c *Cluster) syncVolumes() error {

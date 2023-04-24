@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,10 @@ import (
 	"context"
 	time "time"
 
-	acidzalandov1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	versioned "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned"
-	internalinterfaces "github.com/zalando/postgres-operator/pkg/generated/informers/externalversions/internalinterfaces"
-	v1 "github.com/zalando/postgres-operator/pkg/generated/listers/acid.zalan.do/v1"
+	acidcosmicv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	versioned "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned"
+	internalinterfaces "github.com/cosmicrocks/scdl8/pkg/generated/informers/externalversions/internalinterfaces"
+	v1 "github.com/cosmicrocks/scdl8/pkg/generated/listers/acid.cosmic.rocks/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -77,7 +77,7 @@ func NewFilteredPostgresqlInformer(client versioned.Interface, namespace string,
 				return client.AcidV1().Postgresqls(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&acidzalandov1.Postgresql{},
+		&acidcosmicv1.Postgresql{},
 		resyncPeriod,
 		indexers,
 	)
@@ -88,7 +88,7 @@ func (f *postgresqlInformer) defaultInformer(client versioned.Interface, resyncP
 }
 
 func (f *postgresqlInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&acidzalandov1.Postgresql{}, f.defaultInformer)
+	return f.factory.InformerFor(&acidcosmicv1.Postgresql{}, f.defaultInformer)
 }
 
 func (f *postgresqlInformer) Lister() v1.PostgresqlLister {

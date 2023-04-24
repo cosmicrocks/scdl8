@@ -36,8 +36,8 @@ var KubectlPgVersion string = "1.0"
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "version of kubectl-pg & postgres-operator",
-	Long:  `version of kubectl-pg and current running postgres-operator`,
+	Short: "version of kubectl-pg & scdl8",
+	Long:  `version of kubectl-pg and current running scdl8`,
 	Run: func(cmd *cobra.Command, args []string) {
 		namespace, err := cmd.Flags().GetString("namespace")
 		if err != nil {
@@ -65,13 +65,13 @@ func version(namespace string) {
 
 	operatorDeployment := getPostgresOperator(client)
 	if operatorDeployment.Name == "" {
-		log.Fatal("make sure zalando's postgres operator is running")
+		log.Fatal("make sure cosmicrocks's postgres operator is running")
 	}
 	operatorImage := operatorDeployment.Spec.Template.Spec.Containers[0].Image
 	imageDetails := strings.Split(operatorImage, ":")
 	imageSplit := len(imageDetails)
 	imageVersion := imageDetails[imageSplit-1]
-	fmt.Printf("Postgres-Operator: %s\n", imageVersion)
+	fmt.Printf("Scdl8: %s\n", imageVersion)
 }
 
 func init() {

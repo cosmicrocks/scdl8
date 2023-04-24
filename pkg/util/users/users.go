@@ -7,9 +7,9 @@ import (
 
 	"reflect"
 
-	"github.com/zalando/postgres-operator/pkg/spec"
-	"github.com/zalando/postgres-operator/pkg/util"
-	"github.com/zalando/postgres-operator/pkg/util/constants"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
+	"github.com/cosmicrocks/scdl8/pkg/util"
+	"github.com/cosmicrocks/scdl8/pkg/util/constants"
 )
 
 const (

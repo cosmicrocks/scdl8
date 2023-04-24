@@ -1,13 +1,13 @@
 # for github.com
-X-Zalando-Team: "acid"
+X-Cosmicrocks-Team: "acid"
 # type should be one of [code, doc, config, tools, secrets]
-# code will be the default value, if X-Zalando-Type is not found in .zappr.yml
-X-Zalando-Type: code
+# code will be the default value, if X-Cosmicrocks-Type is not found in .zappr.yml
+X-Cosmicrocks-Type: code
 
 approvals:
   groups:
-    zalando:
+    cosmicrocks:
       minimum: 2
       from:
         orgs:
-          - zalando
+          - cosmicrocks

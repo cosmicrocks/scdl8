@@ -1,4 +1,4 @@
-# Kubectl Plugin for Zalando's Postgres Operator
+# Kubectl Plugin for Cosmicrocks's Postgres Operator
 
 This plugin is a prototype developed as a part of **Google Summer of Code 2019** under the [Postgres Operator](https://summerofcode.withgoogle.com/archive/2019/organizations/6187982082539520/) organization.
 
@@ -11,9 +11,9 @@ From Go >=1.13 Go modules will be enabled by default.
 ```bash
 # Assumes you have a working KUBECONFIG
 $ GO111MODULE="on"
-$ GOPATH/src/github.com/zalando/postgres-operator/kubectl-pg  go mod vendor
+$ GOPATH/src/github.com/cosmicrocks/scdl8/kubectl-pg  go mod vendor
 # This generate a vendor directory with all dependencies needed by the plugin.
-$ $GOPATH/src/github.com/zalando/postgres-operator/kubectl-pg  go install
+$ $GOPATH/src/github.com/cosmicrocks/scdl8/kubectl-pg  go install
 # This will place the kubectl-pg binary in your $GOPATH/bin
 ```
 
@@ -130,7 +130,7 @@ When making changes to the plugin make sure to change the (major/patch) version 
 
 ### Weekly Reports
 
-https://github.com/VineethReddy02/GSoC-Kubectl-Plugin-for-Postgres-Operator-tracker
+https://github.com/VineethReddy02/GSoC-Kubectl-Plugin-for-Scdl8-tracker
 
 ### Final Project Report
 

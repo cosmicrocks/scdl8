@@ -1,7 +1,7 @@
 package v1
 
 import (
-	acidzalando "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do"
+	acidcosmic "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -21,7 +21,7 @@ var (
 	//AddToScheme is localSchemeBuilder.AddToScheme
 	AddToScheme = localSchemeBuilder.AddToScheme
 	//SchemeGroupVersion has GroupName and APIVersion
-	SchemeGroupVersion = schema.GroupVersion{Group: acidzalando.GroupName, Version: APIVersion}
+	SchemeGroupVersion = schema.GroupVersion{Group: acidcosmic.GroupName, Version: APIVersion}
 )
 
 func init() {

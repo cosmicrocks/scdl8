@@ -1,9 +1,9 @@
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
   name: postgresql-operator-default-configuration
 configuration:
-  docker_image: ghcr.io/zalando/spilo-15:3.0-p1
+  docker_image: ghcr.io/cosmicrocks/spilo-15:3.0-p1
   # enable_crd_registration: true
   # crd_categories:
   # - all
@@ -28,7 +28,7 @@ configuration:
   #     protocol: TCP
   workers: 8
   users:
-    # additional_owner_roles: 
+    # additional_owner_roles:
     # - cron_admin
     enable_password_rotation: false
     password_rotation_interval: 90
@@ -160,7 +160,7 @@ configuration:
     # logical_backup_cpu_request: ""
     # logical_backup_memory_limit: ""
     # logical_backup_memory_request: ""
-    logical_backup_docker_image: "registry.opensource.zalan.do/acid/logical-backup:v1.10.0"
+    logical_backup_docker_image: "registry.opensource.cosmic.rocks/acid/logical-backup:v1.10.0"
     # logical_backup_google_application_credentials: ""
     logical_backup_job_prefix: "logical-backup-"
     logical_backup_provider: "s3"
@@ -183,7 +183,7 @@ configuration:
     enable_team_superuser: false
     enable_teams_api: false
     # pam_configuration: ""
-    pam_role_name: zalandos
+    pam_role_name: cosmics
     # postgres_superuser_teams:
     # - postgres_superusers
     protected_role_names:
@@ -203,7 +203,7 @@ configuration:
     connection_pooler_default_cpu_request: "500m"
     connection_pooler_default_memory_limit: 100Mi
     connection_pooler_default_memory_request: 100Mi
-    connection_pooler_image: "registry.opensource.zalan.do/acid/pgbouncer:master-27"
+    connection_pooler_image: "registry.opensource.cosmic.rocks/acid/pgbouncer:master-27"
     # connection_pooler_max_db_connections: 60
     connection_pooler_mode: "transaction"
     connection_pooler_number_of_instances: 2

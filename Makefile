@@ -1,6 +1,6 @@
 .PHONY: clean local test linux macos mocks docker push e2e
 
-BINARY ?= postgres-operator
+BINARY ?= scdl8
 BUILD_FLAGS ?= -v
 CGO_ENABLED ?= 0
 ifeq ($(RACE),1)
@@ -12,7 +12,7 @@ LOCAL_BUILD_FLAGS ?= $(BUILD_FLAGS)
 LDFLAGS ?= -X=main.version=$(VERSION)
 DOCKERDIR = docker
 
-IMAGE ?= registry.opensource.zalan.do/acid/$(BINARY)
+IMAGE ?= registry.opensource.cosmic.rocks/acid/$(BINARY)
 TAG ?= $(VERSION)
 GITHEAD = $(shell git rev-parse --short HEAD)
 GITURL = $(shell git config --get remote.origin.url)

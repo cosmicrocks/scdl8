@@ -313,7 +313,7 @@ new
                   )
 
             tr
-              td 
+              td
               td Specify Iops and Throughput only if you need more than the default 3000 Iops and 125Mb/s EBS provides.
 
             tr
@@ -563,7 +563,7 @@ new
     // Dedent twice because pug adds tabs:
     this.yamlTemplate = dedent`
       kind: "postgresql"
-      apiVersion: "acid.zalan.do/v1"
+      apiVersion: "acid.cosmic.rocks/v1"
 
       metadata:
         name: "{{ name }}"
@@ -768,7 +768,7 @@ new
 
     this.instanceCountChange = e => {
       this.instanceCount = +e.target.value
-      if (this.instanceCount < 2) {	
+      if (this.instanceCount < 2) {
         this.enableReplicaLoadBalancer = false
         this.enableReplicaConnectionPooler = false
         this.enableReplicaPoolerLoadBalancer = false

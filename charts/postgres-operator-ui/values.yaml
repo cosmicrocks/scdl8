@@ -1,4 +1,4 @@
-# Default values for postgres-operator-ui.
+# Default values for scdl8-ui.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -6,8 +6,8 @@ replicaCount: 1
 
 # configure ui image
 image:
-  registry: registry.opensource.zalan.do
-  repository: acid/postgres-operator-ui
+  registry: registry.opensource.cosmic.rocks
+  repository: acid/scdl8-ui
   tag: v1.10.0
   pullPolicy: "IfNotPresent"
 
@@ -42,7 +42,7 @@ envs:
   # IMPORTANT: While operator chart and UI chart are independent, this is the interface between
   # UI and operator API. Insert the service name of the operator API here!
   appUrl: "http://localhost:8081"
-  operatorApiUrl: "http://postgres-operator:8080"
+  operatorApiUrl: "http://scdl8:8080"
   operatorClusterNameLabel: "cluster-name"
   resourcesVisible: "False"
   targetNamespace: "default"
@@ -57,7 +57,7 @@ podAnnotations:
 # Extra ENVs are writen in kubenertes format and added "as is" to the pod's env variables
 # https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
 # https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#environment-variables
-# UI specific env variables can be found here: https://github.com/zalando/postgres-operator/blob/master/ui/operator_ui/main.py
+# UI specific env variables can be found here: https://github.com/cosmicrocks/scdl8/blob/master/ui/operator_ui/main.py
 extraEnvs:
   []
   # Exemple of settings to make snapshot view working in the ui when using AWS

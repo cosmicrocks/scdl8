@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,8 @@ package externalversions
 import (
 	"fmt"
 
-	v1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	zalandoorgv1 "github.com/zalando/postgres-operator/pkg/apis/zalando.org/v1"
+	v1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	cosmicorgv1 "github.com/cosmicrocks/scdl8/pkg/apis/cosmic.rocks/v1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
 )
@@ -59,15 +59,15 @@ func (f *genericInformer) Lister() cache.GenericLister {
 // TODO extend this to unknown resources with a client pool
 func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource) (GenericInformer, error) {
 	switch resource {
-	// Group=acid.zalan.do, Version=v1
+	// Group=acid.cosmic.rocks, Version=v1
 	case v1.SchemeGroupVersion.WithResource("postgresteams"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Acid().V1().PostgresTeams().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("postgresqls"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Acid().V1().Postgresqls().Informer()}, nil
 
-		// Group=zalando.org, Version=v1
-	case zalandoorgv1.SchemeGroupVersion.WithResource("fabriceventstreams"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Zalando().V1().FabricEventStreams().Informer()}, nil
+		// Group=cosmic.rocks, Version=v1
+	case cosmicorgv1.SchemeGroupVersion.WithResource("fabriceventstreams"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Cosmicrocks().V1().FabricEventStreams().Informer()}, nil
 
 	}
 

@@ -1,6 +1,6 @@
-package zalando
+package cosmicrocks
 
 const (
 	// GroupName is the group name for the operator CRDs
-	GroupName = "zalando.org"
+	GroupName = "cosmic.rocks"
 )

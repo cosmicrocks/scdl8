@@ -27,4 +27,4 @@ export GOPATH="$HOME/go"
 mkdir -p build
 
 GO111MODULE=on go mod vendor
-CGO_ENABLED=0 go build -o build/postgres-operator -v -ldflags "$OPERATOR_LDFLAGS" cmd/main.go
+CGO_ENABLED=0 go build -o build/scdl8 -v -ldflags "$OPERATOR_LDFLAGS" cmd/main.go

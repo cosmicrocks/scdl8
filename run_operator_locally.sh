@@ -16,7 +16,7 @@ set -o pipefail
 IFS=$'\n\t'
 
 
-readonly PATH_TO_LOCAL_OPERATOR_MANIFEST="/tmp/local-postgres-operator-manifest.yaml"
+readonly PATH_TO_LOCAL_OPERATOR_MANIFEST="/tmp/local-scdl8-manifest.yaml"
 readonly PATH_TO_PORT_FORWARED_KUBECTL_PID="/tmp/kubectl-port-forward.pid"
 readonly PATH_TO_THE_PG_CLUSTER_MANIFEST="/tmp/minimal-postgres-manifest.yaml"
 readonly LOCAL_PORT="8080"
@@ -125,7 +125,7 @@ function deploy_self_built_image() {
     # update the tag in the postgres operator conf
     # since the image with this tag already exists on the machine,
     # docker should not attempt to fetch it from the registry due to imagePullPolicy
-    sed -e "s/\(image\:.*\:\).*$/\1$TAG/; s/smoke-tested-//" manifests/postgres-operator.yaml > "$PATH_TO_LOCAL_OPERATOR_MANIFEST"
+    sed -e "s/\(image\:.*\:\).*$/\1$TAG/; s/smoke-tested-//" manifests/scdl8.yaml > "$PATH_TO_LOCAL_OPERATOR_MANIFEST"
 
     retry "kubectl apply -f \"$PATH_TO_LOCAL_OPERATOR_MANIFEST\"" "attempt to create $PATH_TO_LOCAL_OPERATOR_MANIFEST resource"
 }
@@ -143,7 +143,7 @@ function start_operator(){
         retry "kubectl  create -f manifests/\"$file\"" "attempt to create $file resource"
     done
 
-    cp  manifests/postgres-operator.yaml $PATH_TO_LOCAL_OPERATOR_MANIFEST
+    cp  manifests/scdl8.yaml $PATH_TO_LOCAL_OPERATOR_MANIFEST
 
     if [[ "$should_build_custom_operator" = true ]]; then # set in main()
         deploy_self_built_image
@@ -152,7 +152,7 @@ function start_operator(){
     fi
 
     local -r msg="Wait for the postgresql custom resource definition to register..."
-    local -r cmd="kubectl get crd | grep --quiet 'postgresqls.acid.zalan.do'"
+    local -r cmd="kubectl get crd | grep --quiet 'postgresqls.acid.cosmic.rocks'"
     retry "$cmd" "$msg "
 
 }
@@ -163,7 +163,7 @@ function forward_ports(){
     echo "==== FORWARD OPERATOR PORT $OPERATOR_PORT TO LOCAL PORT $LOCAL_PORT  ===="
 
     local operator_pod
-    operator_pod=$(kubectl get pod -l name=postgres-operator -o jsonpath={.items..metadata.name})
+    operator_pod=$(kubectl get pod -l name=scdl8 -o jsonpath={.items..metadata.name})
 
     # Spawn `kubectl port-forward` in the background to keep current terminal
     # responsive. Hide stdout because otherwise there is a note about each TCP
@@ -264,7 +264,7 @@ function submit_postgresql_manifest(){
 
 function main(){
 
-    if ! [[ $(basename "$PWD") == "postgres-operator" ]]; then
+    if ! [[ $(basename "$PWD") == "scdl8" ]]; then
         echo "Please execute the script only from the root directory of the Postgres Operator repo."
         exit 1
     fi

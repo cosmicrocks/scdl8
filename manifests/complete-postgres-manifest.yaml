@@ -1,4 +1,4 @@
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: acid-test-cluster
@@ -6,15 +6,15 @@ metadata:
 #    application: test-app
 #    environment: demo
 #  annotations:
-#    "acid.zalan.do/controller": "second-operator"
+#    "acid.cosmic.rocks/controller": "second-operator"
 #    "delete-date": "2020-08-31"  # can only be deleted on that day if "delete-date "key is configured
 #    "delete-clustername": "acid-test-cluster"  # can only be deleted when name matches if "delete-clustername" key is configured
 spec:
-  dockerImage: ghcr.io/zalando/spilo-15:3.0-p1
+  dockerImage: ghcr.io/cosmicrocks/spilo-15:3.0-p1
   teamId: "acid"
   numberOfInstances: 2
   users:  # Application/Robot users
-    zalando:
+    cosmicrocks:
     - superuser
     - createdb
     foo_user: []
@@ -33,7 +33,7 @@ spec:
   allowedSourceRanges:  # load balancers' source ranges for both master and replica services
   - 127.0.0.1/32
   databases:
-    foo: zalando
+    foo: cosmicrocks
   preparedDatabases:
     bar:
       defaultUsers: true
@@ -202,12 +202,12 @@ spec:
 # In Openshift, there is no need to set spiloFSGroup/spilo_fsgroup.
 
 # Add node affinity support by allowing postgres pods to schedule only on nodes that
-# have label: "postgres-operator:enabled" set.
+# have label: "scdl8:enabled" set.
 #  nodeAffinity:
 #    requiredDuringSchedulingIgnoredDuringExecution:
 #      nodeSelectorTerms:
 #        - matchExpressions:
-#            - key: postgres-operator
+#            - key: scdl8
 #              operator: In
 #              values:
 #                - enabled

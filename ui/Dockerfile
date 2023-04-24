@@ -1,5 +1,5 @@
-FROM registry.opensource.zalan.do/library/alpine-3.15:latest
-LABEL maintainer="Team ACID @ Zalando <team-acid@zalando.de>"
+FROM registry.opensource.cosmic.rocks/library/alpine-3.15:latest
+LABEL maintainer="Team ACID @ Cosmicrocks <team-acid@cosmicrocks.de>"
 
 EXPOSE 8081
 

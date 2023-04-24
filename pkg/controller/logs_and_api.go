@@ -7,10 +7,10 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/zalando/postgres-operator/pkg/cluster"
-	"github.com/zalando/postgres-operator/pkg/spec"
-	"github.com/zalando/postgres-operator/pkg/util"
-	"github.com/zalando/postgres-operator/pkg/util/config"
+	"github.com/cosmicrocks/scdl8/pkg/cluster"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
+	"github.com/cosmicrocks/scdl8/pkg/util"
+	"github.com/cosmicrocks/scdl8/pkg/util/config"
 	"k8s.io/apimachinery/pkg/types"
 )
 
@@ -196,7 +196,7 @@ func (c *Controller) GetWorkersCnt() uint32 {
 	return c.opConfig.Workers
 }
 
-//WorkerStatus provides status of the worker
+// WorkerStatus provides status of the worker
 func (c *Controller) WorkerStatus(workerID uint32) (*cluster.WorkerStatus, error) {
 	obj, ok := c.curWorkerCluster.Load(workerID)
 	if !ok || obj == nil {

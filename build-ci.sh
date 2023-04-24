@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e -x
 
-team_repo="$GOPATH/src/github.com/zalando/"
-project_dir="$team_repo/postgres-operator"
+team_repo="$GOPATH/src/github.com/cosmicrocks/"
+project_dir="$team_repo/scdl8"
 
 mkdir -p "$team_repo"
 

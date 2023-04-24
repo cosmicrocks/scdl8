@@ -1,6 +1,6 @@
 .PHONY: clean copy docker push tools test
 
-BINARY ?= postgres-operator-e2e-tests-runner
+BINARY ?= scdl8-e2e-tests-runner
 BUILD_FLAGS ?= -v
 CGO_ENABLED ?= 0
 ifeq ($(RACE),1)
@@ -11,7 +11,7 @@ endif
 LOCAL_BUILD_FLAGS ?= $(BUILD_FLAGS)
 LDFLAGS ?= -X=main.version=$(VERSION)
 
-IMAGE            ?= registry.opensource.zalan.do/acid/$(BINARY)
+IMAGE            ?= registry.opensource.cosmic.rocks/acid/$(BINARY)
 VERSION          ?= $(shell git describe --tags --always --dirty)
 TAG              ?= $(VERSION)
 GITHEAD          = $(shell git rev-parse --short HEAD)

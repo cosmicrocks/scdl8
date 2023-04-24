@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
 - configmap.yaml
 - operator-service-account-rbac.yaml
-- postgres-operator.yaml
+- scdl8.yaml
 - api-service.yaml

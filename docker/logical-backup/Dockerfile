@@ -1,5 +1,5 @@
-FROM registry.opensource.zalan.do/library/ubuntu-18.04:latest
-LABEL maintainer="Team ACID @ Zalando <team-acid@zalando.de>"
+FROM registry.opensource.cosmic.rocks/library/ubuntu-18.04:latest
+LABEL maintainer="Team ACID @ Cosmicrocks <team-acid@cosmicrocks.de>"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update     \

@@ -1,5 +1,5 @@
 {
-  "name": "postgres-operator-ui",
+  "name": "scdl8-ui",
   "version": "1.10.0",
   "description": "PostgreSQL Operator UI",
   "main": "src/app.js",
@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zalando/postgres-operator.git"
+    "url": "git+https://github.com/cosmicrocks/scdl8.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zalando/postgres-operator.git/issues"
+    "url": "https://github.com/cosmicrocks/scdl8.git/issues"
   },
-  "homepage": "https://github.com/zalando/postgres-operator.git#readme",
+  "homepage": "https://github.com/cosmicrocks/scdl8.git#readme",
   "dependencies": {
     "@babel/core": "^7.20.12",
     "@babel/polyfill": "^7.12.1",

@@ -11,11 +11,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/zalando/postgres-operator/pkg/util/constants"
-	httpclient "github.com/zalando/postgres-operator/pkg/util/httpclient"
+	"github.com/cosmicrocks/scdl8/pkg/util/constants"
+	httpclient "github.com/cosmicrocks/scdl8/pkg/util/httpclient"
 
+	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
 	"github.com/sirupsen/logrus"
-	acidv1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
 	v1 "k8s.io/api/core/v1"
 )
 
@@ -150,7 +150,7 @@ func (p *Patroni) Switchover(master *v1.Pod, candidate string) error {
 
 //TODO: add an option call /patroni to check if it is necessary to restart the server
 
-//SetPostgresParameters sets Postgres options via Patroni patch API call.
+// SetPostgresParameters sets Postgres options via Patroni patch API call.
 func (p *Patroni) SetPostgresParameters(server *v1.Pod, parameters map[string]string) error {
 	buf := &bytes.Buffer{}
 	err := json.NewEncoder(buf).Encode(map[string]map[string]interface{}{"postgresql": {"parameters": parameters}})
@@ -164,7 +164,7 @@ func (p *Patroni) SetPostgresParameters(server *v1.Pod, parameters map[string]st
 	return p.httpPostOrPatch(http.MethodPatch, apiURLString+configPath, buf)
 }
 
-//SetConfig sets Patroni options via Patroni patch API call.
+// SetConfig sets Patroni options via Patroni patch API call.
 func (p *Patroni) SetConfig(server *v1.Pod, config map[string]interface{}) error {
 	buf := &bytes.Buffer{}
 	err := json.NewEncoder(buf).Encode(config)

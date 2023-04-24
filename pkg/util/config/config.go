@@ -7,8 +7,8 @@ import (
 
 	"fmt"
 
-	"github.com/zalando/postgres-operator/pkg/spec"
-	"github.com/zalando/postgres-operator/pkg/util/constants"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
+	"github.com/cosmicrocks/scdl8/pkg/util/constants"
 	v1 "k8s.io/api/core/v1"
 )
 
@@ -97,7 +97,7 @@ type InfrastructureRole struct {
 // Auth describes authentication specific configuration parameters
 type Auth struct {
 	SecretNameTemplate            StringTemplate        `name:"secret_name_template" default:"{username}.{cluster}.credentials.{tprkind}.{tprgroup}"`
-	PamRoleName                   string                `name:"pam_role_name" default:"zalandos"`
+	PamRoleName                   string                `name:"pam_role_name" default:"cosmics"`
 	PamConfiguration              string                `name:"pam_configuration" default:"https://info.example.com/oauth2/tokeninfo?access_token= uid realm=/employees"`
 	TeamsAPIUrl                   string                `name:"teams_api_url" default:"https://teams.example.com/api/"`
 	OAuthTokenSecretName          spec.NamespacedName   `name:"oauth_token_secret_name" default:"postgresql-operator"`
@@ -126,7 +126,7 @@ type Scalyr struct {
 // LogicalBackup defines configuration for logical backup
 type LogicalBackup struct {
 	LogicalBackupSchedule                     string `name:"logical_backup_schedule" default:"30 00 * * *"`
-	LogicalBackupDockerImage                  string `name:"logical_backup_docker_image" default:"registry.opensource.zalan.do/acid/logical-backup:v1.10.0"`
+	LogicalBackupDockerImage                  string `name:"logical_backup_docker_image" default:"registry.opensource.cosmic.rocks/acid/logical-backup:v1.10.0"`
 	LogicalBackupProvider                     string `name:"logical_backup_provider" default:"s3"`
 	LogicalBackupAzureStorageAccountName      string `name:"logical_backup_azure_storage_account_name" default:""`
 	LogicalBackupAzureStorageContainer        string `name:"logical_backup_azure_storage_container" default:""`
@@ -151,7 +151,7 @@ type ConnectionPooler struct {
 	NumberOfInstances                    *int32 `name:"connection_pooler_number_of_instances" default:"2"`
 	Schema                               string `name:"connection_pooler_schema" default:"pooler"`
 	User                                 string `name:"connection_pooler_user" default:"pooler"`
-	Image                                string `name:"connection_pooler_image" default:"registry.opensource.zalan.do/acid/pgbouncer"`
+	Image                                string `name:"connection_pooler_image" default:"registry.opensource.cosmic.rocks/acid/pgbouncer"`
 	Mode                                 string `name:"connection_pooler_mode" default:"transaction"`
 	MaxDBConnections                     *int32 `name:"connection_pooler_max_db_connections" default:"60"`
 	ConnectionPoolerDefaultCPURequest    string `name:"connection_pooler_default_cpu_request" default:"500m"`
@@ -172,7 +172,7 @@ type Config struct {
 	WatchedNamespace        string            `name:"watched_namespace"` // special values: "*" means 'watch all namespaces', the empty string "" means 'watch a namespace where operator is deployed to'
 	KubernetesUseConfigMaps bool              `name:"kubernetes_use_configmaps" default:"false"`
 	EtcdHost                string            `name:"etcd_host" default:""` // special values: the empty string "" means Patroni will use K8s as a DCS
-	DockerImage             string            `name:"docker_image" default:"ghcr.io/zalando/spilo-15:3.0-p1"`
+	DockerImage             string            `name:"docker_image" default:"ghcr.io/cosmicrocks/spilo-15:3.0-p1"`
 	SidecarImages           map[string]string `name:"sidecar_docker_images"` // deprecated in favour of SidecarContainers
 	SidecarContainers       []v1.Container    `name:"sidecars"`
 	PodServiceAccountName   string            `name:"pod_service_account_name" default:"postgres-pod"`

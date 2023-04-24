@@ -4,7 +4,7 @@ description: 'This priority class must be used only for databases controlled by 
 kind: PriorityClass
 metadata:
   labels:
-    application: postgres-operator
+    application: scdl8
   name: postgres-pod-priority
 preemptionPolicy: PreemptLowerPriority
 globalDefault: false

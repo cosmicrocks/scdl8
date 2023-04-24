@@ -12,8 +12,8 @@ from kubernetes import client
 from tests.k8s_api import K8s
 from kubernetes.client.rest import ApiException
 
-SPILO_CURRENT = "registry.opensource.zalan.do/acid/spilo-15-e2e:0.1"
-SPILO_LAZY = "registry.opensource.zalan.do/acid/spilo-15-e2e:0.2"
+SPILO_CURRENT = "registry.opensource.cosmic.rocks/acid/spilo-15-e2e:0.1"
+SPILO_LAZY = "registry.opensource.cosmic.rocks/acid/spilo-15-e2e:0.2"
 
 
 def to_selector(labels):
@@ -104,11 +104,11 @@ class EndToEndTestCase(unittest.TestCase):
             print("Failed to create the '{0}' namespace: {1}".format(cls.test_namespace, e))
 
         # submit the most recent operator image built on the Docker host
-        with open("manifests/postgres-operator.yaml", 'r+') as f:
+        with open("manifests/scdl8.yaml", 'r+') as f:
             operator_deployment = yaml.safe_load(f)
             operator_deployment["spec"]["template"]["spec"]["containers"][0]["image"] = os.environ['OPERATOR_IMAGE']
 
-        with open("manifests/postgres-operator.yaml", 'w') as f:
+        with open("manifests/scdl8.yaml", 'w') as f:
             yaml.dump(operator_deployment, f, Dumper=yaml.Dumper)
 
         with open("manifests/configmap.yaml", 'r+') as f:
@@ -124,7 +124,7 @@ class EndToEndTestCase(unittest.TestCase):
                          "operatorconfiguration.crd.yaml",
                          "postgresteam.crd.yaml",
                          "configmap.yaml",
-                         "postgres-operator.yaml",
+                         "scdl8.yaml",
                          "api-service.yaml",
                          "infrastructure-roles.yaml",
                          "infrastructure-roles-new.yaml",
@@ -136,8 +136,8 @@ class EndToEndTestCase(unittest.TestCase):
         k8s.wait_for_operator_pod_start()
 
         # reset taints and tolerations
-        k8s.api.core_v1.patch_node("postgres-operator-e2e-tests-worker", {"spec": {"taints": []}})
-        k8s.api.core_v1.patch_node("postgres-operator-e2e-tests-worker2", {"spec": {"taints": []}})
+        k8s.api.core_v1.patch_node("scdl8-e2e-tests-worker", {"spec": {"taints": []}})
+        k8s.api.core_v1.patch_node("scdl8-e2e-tests-worker2", {"spec": {"taints": []}})
 
         # make sure we start a new operator on every new run,
         # this tackles the problem when kind is reused
@@ -146,7 +146,7 @@ class EndToEndTestCase(unittest.TestCase):
         k8s.update_config({}, step="TestSuite Startup")
 
         actual_operator_image = k8s.api.core_v1.list_namespaced_pod(
-            'default', label_selector='name=postgres-operator').items[0].spec.containers[0].image
+            'default', label_selector='name=scdl8').items[0].spec.containers[0].image
         print("Tested operator image: {}".format(actual_operator_image))  # shows up after tests finish
 
         result = k8s.create_with_kubectl("manifests/minimal-postgres-manifest.yaml")
@@ -191,7 +191,7 @@ class EndToEndTestCase(unittest.TestCase):
               FROM pg_catalog.pg_authid a
               JOIN pg_catalog.pg_auth_members am
                 ON a.oid = am.member
-               AND a.rolname IN ('zalando', 'bar_owner', 'bar_data_owner')
+               AND a.rolname IN ('cosmicrocks', 'bar_owner', 'bar_data_owner')
               JOIN pg_catalog.pg_authid a2
                 ON a2.oid = am.roleid
              WHERE a2.rolname = 'cron_admin';
@@ -253,7 +253,7 @@ class EndToEndTestCase(unittest.TestCase):
         # add team and member to custom-team-membership
         # contains already elephant user
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-        'acid.zalan.do', 'v1', 'default',
+        'acid.cosmic.rocks', 'v1', 'default',
         'postgresteams', 'custom-team-membership',
         {
             'spec': {
@@ -281,7 +281,7 @@ class EndToEndTestCase(unittest.TestCase):
 
         # replace additional member and check if the removed member's role is renamed
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-        'acid.zalan.do', 'v1', 'default',
+        'acid.cosmic.rocks', 'v1', 'default',
         'postgresteams', 'custom-team-membership',
         {
             'spec': {
@@ -311,7 +311,7 @@ class EndToEndTestCase(unittest.TestCase):
 
         # re-add additional member and check if the role is renamed back
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-        'acid.zalan.do', 'v1', 'default',
+        'acid.cosmic.rocks', 'v1', 'default',
         'postgresteams', 'custom-team-membership',
         {
             'spec': {
@@ -342,7 +342,7 @@ class EndToEndTestCase(unittest.TestCase):
         # re-add other additional member, operator should grant LOGIN back to tester
         # but nothing happens to deleted role
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-        'acid.zalan.do', 'v1', 'default',
+        'acid.cosmic.rocks', 'v1', 'default',
         'postgresteams', 'custom-team-membership',
         {
             'spec': {
@@ -416,7 +416,7 @@ class EndToEndTestCase(unittest.TestCase):
 
         try:
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_config)
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_config)
 
             self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
 
@@ -486,7 +486,7 @@ class EndToEndTestCase(unittest.TestCase):
             }
 
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_max_connections)
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_max_connections)
 
             self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
 
@@ -531,7 +531,7 @@ class EndToEndTestCase(unittest.TestCase):
                 pg_patch_config["spec"]["patroni"]["slots"][slot_name] = slot_details
 
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_add_new_slots_patch)
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_add_new_slots_patch)
 
             self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
             self.eventuallyTrue(compare_config, "Postgres config not applied")
@@ -556,9 +556,9 @@ class EndToEndTestCase(unittest.TestCase):
 
             pg_patch_config["spec"]["patroni"]["slots"][slot_to_change]["database"] = "bar"
             del pg_patch_config["spec"]["patroni"]["slots"][slot_to_remove]
-            
+
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_delete_slot_patch)
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_delete_slot_patch)
 
             self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
             self.eventuallyTrue(compare_config, "Postgres config not applied")
@@ -573,7 +573,7 @@ class EndToEndTestCase(unittest.TestCase):
 
             self.eventuallyEqual(lambda: self.query_database(leader.metadata.name, "postgres", get_slot_query%("database", slot_to_change))[0], "bar",
                 "The replication slot cannot be updated", 10, 5)
-            
+
             # make sure slot from Patroni didn't get deleted
             self.eventuallyEqual(lambda: len(self.query_database(leader.metadata.name, "postgres", get_slot_query%("slot_name", patroni_slot))), 1,
                 "The replication slot from Patroni gets deleted", 10, 5)
@@ -607,7 +607,7 @@ class EndToEndTestCase(unittest.TestCase):
 
         # create secret in test namespace
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            'acid.zalan.do', 'v1', 'default',
+            'acid.cosmic.rocks', 'v1', 'default',
             'postgresqls', 'acid-minimal-cluster',
             {
                 'spec': {
@@ -651,7 +651,7 @@ class EndToEndTestCase(unittest.TestCase):
                 }
             }
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_tls)
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_tls)
 
             # wait for switched over
             k8s.wait_for_pod_failover(replica_nodes, 'spilo-role=master,' + cluster_label)
@@ -680,7 +680,7 @@ class EndToEndTestCase(unittest.TestCase):
         self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
 
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            'acid.zalan.do', 'v1', 'default',
+            'acid.cosmic.rocks', 'v1', 'default',
             'postgresqls', 'acid-minimal-cluster',
             {
                 'spec': {
@@ -702,7 +702,7 @@ class EndToEndTestCase(unittest.TestCase):
         self.eventuallyEqual(lambda: k8s.count_pods_with_volume_mount("pg-tls", pooler_label), 4, "TLS volume mount missing in pooler pods")
 
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            'acid.zalan.do', 'v1', 'default',
+            'acid.cosmic.rocks', 'v1', 'default',
             'postgresqls', 'acid-minimal-cluster',
             {
                 'spec': {
@@ -734,7 +734,7 @@ class EndToEndTestCase(unittest.TestCase):
 
         # Turn off only master connection pooler
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            'acid.zalan.do', 'v1', 'default',
+            'acid.cosmic.rocks', 'v1', 'default',
             'postgresqls', 'acid-minimal-cluster',
             {
                 'spec': {
@@ -758,7 +758,7 @@ class EndToEndTestCase(unittest.TestCase):
 
         # Turn off only replica connection pooler
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            'acid.zalan.do', 'v1', 'default',
+            'acid.cosmic.rocks', 'v1', 'default',
             'postgresqls', 'acid-minimal-cluster',
             {
                 'spec': {
@@ -786,7 +786,7 @@ class EndToEndTestCase(unittest.TestCase):
 
         # scale up connection pooler deployment
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            'acid.zalan.do', 'v1', 'default',
+            'acid.cosmic.rocks', 'v1', 'default',
             'postgresqls', 'acid-minimal-cluster',
             {
                 'spec': {
@@ -803,7 +803,7 @@ class EndToEndTestCase(unittest.TestCase):
 
         # turn it off, keeping config should be overwritten by false
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            'acid.zalan.do', 'v1', 'default',
+            'acid.cosmic.rocks', 'v1', 'default',
             'postgresqls', 'acid-minimal-cluster',
             {
                 'spec': {
@@ -839,7 +839,7 @@ class EndToEndTestCase(unittest.TestCase):
 
         # remove config section to make test work next time
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            'acid.zalan.do', 'v1', 'default',
+            'acid.cosmic.rocks', 'v1', 'default',
             'postgresqls', 'acid-minimal-cluster',
             {
                 'spec': {
@@ -870,7 +870,7 @@ class EndToEndTestCase(unittest.TestCase):
                 }
             }
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_enable_lbs)
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_enable_lbs)
 
             self.eventuallyEqual(lambda: k8s.get_service_type(cluster_label.format("master")),
                                  'LoadBalancer',
@@ -888,7 +888,7 @@ class EndToEndTestCase(unittest.TestCase):
                 }
             }
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_disable_lbs)
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_disable_lbs)
 
             self.eventuallyEqual(lambda: k8s.get_service_type(cluster_label.format("master")),
                                  'ClusterIP',
@@ -1126,7 +1126,7 @@ class EndToEndTestCase(unittest.TestCase):
             }
         }
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_enable_backup)
+            "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_enable_backup)
 
         try:
             self.eventuallyEqual(lambda: len(k8s.get_logical_backup_job().items), 1, "failed to create logical backup job")
@@ -1162,7 +1162,7 @@ class EndToEndTestCase(unittest.TestCase):
                 }
             }
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_disable_backup)
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_disable_backup)
 
             self.eventuallyEqual(lambda: len(k8s.get_logical_backup_job().items), 0, "failed to create logical backup job")
 
@@ -1189,7 +1189,7 @@ class EndToEndTestCase(unittest.TestCase):
             }
         }
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            "acid.zalan.do", "v1", "default", "postgresqls", "acid-upgrade-test", pg_patch_version)
+            "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-upgrade-test", pg_patch_version)
 
         self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
 
@@ -1244,7 +1244,7 @@ class EndToEndTestCase(unittest.TestCase):
             }
         }
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_resources)
+            "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_resources)
         self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"},
                              "Operator does not get in sync")
 
@@ -1293,7 +1293,7 @@ class EndToEndTestCase(unittest.TestCase):
             # ideally we should delete the 'test' namespace here but
             # the pods inside the namespace stuck in the Terminating state making the test time out
             k8s.api.custom_objects_api.delete_namespaced_custom_object(
-                "acid.zalan.do", "v1", self.test_namespace, "postgresqls", "acid-test-cluster")
+                "acid.cosmic.rocks", "v1", self.test_namespace, "postgresqls", "acid-test-cluster")
             time.sleep(5)
 
     @timeout_decorator.timeout(TEST_TIMEOUT_SEC)
@@ -1348,7 +1348,7 @@ class EndToEndTestCase(unittest.TestCase):
                 }
             }
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                group="acid.zalan.do",
+                group="acid.cosmic.rocks",
                 version="v1",
                 namespace="default",
                 plural="postgresqls",
@@ -1384,7 +1384,7 @@ class EndToEndTestCase(unittest.TestCase):
                 }
             }
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                group="acid.zalan.do",
+                group="acid.cosmic.rocks",
                 version="v1",
                 namespace="default",
                 plural="postgresqls",
@@ -1479,7 +1479,7 @@ class EndToEndTestCase(unittest.TestCase):
                              "Initial broken deployment not rolled out")
 
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-        'acid.zalan.do', 'v1', 'default',
+        'acid.cosmic.rocks', 'v1', 'default',
         'postgresqls', 'acid-minimal-cluster',
         {
             'spec': {
@@ -1492,7 +1492,7 @@ class EndToEndTestCase(unittest.TestCase):
                              "Operator did not succeed in overwriting labels")
 
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-        'acid.zalan.do', 'v1', 'default',
+        'acid.cosmic.rocks', 'v1', 'default',
         'postgresqls', 'acid-minimal-cluster',
         {
             'spec': {
@@ -1517,20 +1517,20 @@ class EndToEndTestCase(unittest.TestCase):
         pg_patch_inplace_rotation_for_owner = {
             "spec": {
                 "usersWithInPlaceSecretRotation": [
-                    "zalando"
+                    "cosmicrocks"
                 ]
             }
         }
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_inplace_rotation_for_owner)
+            "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_inplace_rotation_for_owner)
         self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
 
         # check if next rotation date was set in secret
-        zalando_secret = k8s.get_secret("zalando")
-        next_rotation_timestamp = datetime.strptime(str(base64.b64decode(zalando_secret.data["nextRotation"]), 'utf-8'), "%Y-%m-%dT%H:%M:%SZ")
+        cosmic_secret = k8s.get_secret("cosmicrocks")
+        next_rotation_timestamp = datetime.strptime(str(base64.b64decode(cosmic_secret.data["nextRotation"]), 'utf-8'), "%Y-%m-%dT%H:%M:%SZ")
         today90days = today+timedelta(days=90)
         self.assertEqual(today90days, next_rotation_timestamp.date(),
-                        "Unexpected rotation date in secret of zalando user: expected {}, got {}".format(today90days, next_rotation_timestamp.date()))
+                        "Unexpected rotation date in secret of cosmicrocks user: expected {}, got {}".format(today90days, next_rotation_timestamp.date()))
 
         # create fake rotation users that should be removed by operator
         # but have one that would still fit into the retention period
@@ -1550,7 +1550,7 @@ class EndToEndTestCase(unittest.TestCase):
             },
         }
         k8s.api.core_v1.patch_namespaced_secret(
-            name="foo-user.acid-minimal-cluster.credentials.postgresql.acid.zalan.do", 
+            name="foo-user.acid-minimal-cluster.credentials.postgresql.acid.cosmic.rocks",
             namespace="default",
             body=secret_fake_rotation)
 
@@ -1566,7 +1566,7 @@ class EndToEndTestCase(unittest.TestCase):
             "data": {
                 "enable_password_rotation": "true",
                 "password_rotation_interval": "30",
-                "password_rotation_user_retention": "30",  # should be set to 60 
+                "password_rotation_user_retention": "30",  # should be set to 60
             },
         }
         k8s.update_config(enable_password_rotation)
@@ -1612,7 +1612,7 @@ class EndToEndTestCase(unittest.TestCase):
             "Could not connect to the database with rotation user {}".format(rotation_user), 10, 5)
 
         # disable password rotation for all other users (foo_user)
-        # and pick smaller intervals to see if the third fake rotation user is dropped 
+        # and pick smaller intervals to see if the third fake rotation user is dropped
         enable_password_rotation = {
             "data": {
                 "enable_password_rotation": "false",
@@ -1660,7 +1660,7 @@ class EndToEndTestCase(unittest.TestCase):
         flag = {
             "metadata": {
                 "annotations": {
-                    "zalando-postgres-operator-rolling-update-required": "true",
+                    "cosmicrocks-scdl8-rolling-update-required": "true",
                 }
             }
         }
@@ -1705,7 +1705,7 @@ class EndToEndTestCase(unittest.TestCase):
         '''
         k8s = self.k8s
         cluster_label = 'application=spilo,cluster-name=acid-minimal-cluster'
-        flag = "zalando-postgres-operator-rolling-update-required"
+        flag = "cosmicrocks-scdl8-rolling-update-required"
 
         # verify we are in good state from potential previous tests
         self.eventuallyEqual(lambda: k8s.count_running_pods(), 2, "No 2 pods running")
@@ -1819,7 +1819,7 @@ class EndToEndTestCase(unittest.TestCase):
             }
         }
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_custom_annotations)
+            "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_custom_annotations)
 
         annotations = {
             "annotation.key": "value",
@@ -1864,7 +1864,7 @@ class EndToEndTestCase(unittest.TestCase):
             }
         }
         k8s.api.custom_objects_api.patch_namespaced_custom_object(
-            "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_crd_annotations)
+            "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_crd_annotations)
 
         annotations = {
             "deployment-time": "2020-04-30 12:00:00",
@@ -1885,7 +1885,7 @@ class EndToEndTestCase(unittest.TestCase):
         cluster_label = 'application=spilo,{}={}'.format(cluster_name_label, standby_cluster_name)
         superuser_name = 'postgres'
         replication_user = 'standby'
-        secret_suffix = 'credentials.postgresql.acid.zalan.do'
+        secret_suffix = 'credentials.postgresql.acid.cosmic.rocks'
 
         # copy secrets from remote cluster before operator creates them when bootstrapping the standby cluster
         postgres_secret = k8s.get_secret(superuser_name)
@@ -1907,7 +1907,7 @@ class EndToEndTestCase(unittest.TestCase):
         finally:
             # delete the standby cluster so that the k8s_api.get_operator_state works correctly in subsequent tests
             k8s.api.custom_objects_api.delete_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-standby-cluster")
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-standby-cluster")
             time.sleep(5)
 
     @timeout_decorator.timeout(TEST_TIMEOUT_SEC)
@@ -1984,7 +1984,7 @@ class EndToEndTestCase(unittest.TestCase):
         try:
             # this delete attempt should be omitted because of missing annotations
             k8s.api.custom_objects_api.delete_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster")
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster")
             time.sleep(15)
             self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
 
@@ -2010,7 +2010,7 @@ class EndToEndTestCase(unittest.TestCase):
                 }
             }
             k8s.api.custom_objects_api.patch_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_delete_annotations)
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster", pg_patch_delete_annotations)
             self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
 
             # wait a little before proceeding
@@ -2020,10 +2020,10 @@ class EndToEndTestCase(unittest.TestCase):
 
             # now delete process should be triggered
             k8s.api.custom_objects_api.delete_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", "acid-minimal-cluster")
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", "acid-minimal-cluster")
 
             self.eventuallyEqual(lambda: len(k8s.api.custom_objects_api.list_namespaced_custom_object(
-                "acid.zalan.do", "v1", "default", "postgresqls", label_selector="cluster-name=acid-minimal-cluster")["items"]), 0, "Manifest not deleted")
+                "acid.cosmic.rocks", "v1", "default", "postgresqls", label_selector="cluster-name=acid-minimal-cluster")["items"]), 0, "Manifest not deleted")
 
             self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
 
@@ -2076,7 +2076,7 @@ class EndToEndTestCase(unittest.TestCase):
 
         # if nodes are different we can quit here
         if master_nodes[0] not in replica_nodes:
-            return True             
+            return True
 
         # enable pod anti affintiy in config map which should trigger movement of replica
         patch_enable_antiaffinity = {
@@ -2100,7 +2100,7 @@ class EndToEndTestCase(unittest.TestCase):
             }
             k8s.update_config(patch_disable_antiaffinity, "disable antiaffinity")
             self.eventuallyEqual(lambda: k8s.get_operator_state(), {"0": "idle"}, "Operator does not get in sync")
-            
+
             k8s.wait_for_pod_start('spilo-role=replica,' + cluster_labels)
             k8s.wait_for_running_pods(cluster_labels, 2)
 
@@ -2111,7 +2111,7 @@ class EndToEndTestCase(unittest.TestCase):
             # if nodes are different we can quit here
             for target_node in target_nodes:
                 if (target_node not in master_nodes or target_node not in replica_nodes) and master_nodes[0] in replica_nodes:
-                    print('Pods run on the same node') 
+                    print('Pods run on the same node')
                     return False
 
         except timeout_decorator.TimeoutError:

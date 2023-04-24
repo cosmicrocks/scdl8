@@ -4,14 +4,14 @@ kind: ClusterRole
 metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
-    app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
-    helm.sh/chart: {{ template "postgres-operator.chart" . }}
+    app.kubernetes.io/name: {{ template "scdl8.name" . }}
+    helm.sh/chart: {{ template "scdl8.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-  name: {{ template "postgres-operator.fullname" . }}:users:admin
+  name: {{ template "scdl8.fullname" . }}:users:admin
 rules:
 - apiGroups:
-  - acid.zalan.do
+  - acid.cosmic.rocks
   resources:
   - postgresqls
   - postgresqls/status
@@ -31,14 +31,14 @@ kind: ClusterRole
 metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
-    app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
-    helm.sh/chart: {{ template "postgres-operator.chart" . }}
+    app.kubernetes.io/name: {{ template "scdl8.name" . }}
+    helm.sh/chart: {{ template "scdl8.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-  name: {{ template "postgres-operator.fullname" . }}:users:edit
+  name: {{ template "scdl8.fullname" . }}:users:edit
 rules:
 - apiGroups:
-  - acid.zalan.do
+  - acid.cosmic.rocks
   resources:
   - postgresqls
   verbs:
@@ -53,14 +53,14 @@ kind: ClusterRole
 metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
-    app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
-    helm.sh/chart: {{ template "postgres-operator.chart" . }}
+    app.kubernetes.io/name: {{ template "scdl8.name" . }}
+    helm.sh/chart: {{ template "scdl8.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-  name: {{ template "postgres-operator.fullname" . }}:users:view
+  name: {{ template "scdl8.fullname" . }}:users:view
 rules:
 - apiGroups:
-  - acid.zalan.do
+  - acid.cosmic.rocks
   resources:
   - postgresqls
   - postgresqls/status

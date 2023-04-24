@@ -1,7 +1,7 @@
 # An image to run e2e tests.
 # The image does not include the tests; all necessary files are bind-mounted when a container starts.
 FROM ubuntu:20.04
-LABEL maintainer="Team ACID @ Zalando <team-acid@zalando.de>"
+LABEL maintainer="Team ACID @ Cosmicrocks <team-acid@cosmicrocks.de>"
 
 ENV TERM xterm-256color
 

@@ -1,6 +1,6 @@
-package acidzalando
+package acidcosmic
 
 const (
 	// GroupName is the group name for the operator CRDs
-	GroupName = "acid.zalan.do"
+	GroupName = "acid.cosmic.rocks"
 )

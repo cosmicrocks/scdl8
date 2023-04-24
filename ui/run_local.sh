@@ -13,7 +13,7 @@ export OPERATOR_API_URL="${OPERATOR_API_URL-http://localhost:8080}"
 export TARGET_NAMESPACE="${TARGET_NAMESPACE-*}"
 
 default_operator_ui_config='{
-  "docs_link":"https://postgres-operator.readthedocs.io/en/latest/",
+  "docs_link":"https://scdl8.readthedocs.io/en/latest/",
   "dns_format_string": "{0}.{1}",
   "databases_visible": true,
   "master_load_balancer_visible": true,
@@ -61,7 +61,7 @@ trap 'kill $(jobs -p)' EXIT
 
 
 # PostgreSQL Operator UI application name as deployed:
-operator_ui_application='postgres-operator-ui'
+operator_ui_application='scdl8-ui'
 
 
 # Hijack the PostgreSQL Operator UI pod as a proxy for its AWS instance profile
@@ -103,14 +103,14 @@ kubectl port-forward \
 
 # Forward localhost:8080 to localhost:8080 on the PostgreSQL Operator pod, which
 # allows access to the Operator REST API
-# when using helm chart use --selector='app.kubernetes.io/name=postgres-operator'
+# when using helm chart use --selector='app.kubernetes.io/name=scdl8'
 echo 'Port forwarding to the PostgreSQL Operator REST API'
 kubectl port-forward \
   --server="${kubernetes_api_url}" \
   "$(
     kubectl get pods \
       --server="${kubernetes_api_url}" \
-      --selector='name=postgres-operator' \
+      --selector='name=scdl8' \
       --output='name' \
       | head --lines=1 \
       | sed 's@^[^/]*/@@'

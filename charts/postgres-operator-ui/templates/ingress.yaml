@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "postgres-operator-ui.fullname" . -}}
+{{- $fullName := include "scdl8-ui.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -14,8 +14,8 @@ metadata:
   name: {{ $fullName }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ template "postgres-operator-ui.name" . }}
-    helm.sh/chart: {{ template "postgres-operator-ui.chart" . }}
+    app.kubernetes.io/name: {{ template "scdl8-ui.name" . }}
+    helm.sh/chart: {{ template "scdl8-ui.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   {{- with .Values.ingress.annotations }}

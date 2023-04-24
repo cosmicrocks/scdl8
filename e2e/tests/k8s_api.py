@@ -66,14 +66,14 @@ class K8s:
         return m, r
 
     def wait_for_operator_pod_start(self):
-        self.wait_for_pod_start("name=postgres-operator")
+        self.wait_for_pod_start("name=scdl8")
         # give operator time to subscribe to objects
         time.sleep(1)
         return True
 
     def get_operator_pod(self):
         pods = self.api.core_v1.list_namespaced_pod(
-            'default', label_selector='name=postgres-operator'
+            'default', label_selector='name=scdl8'
         ).items
 
         pods = list(filter(lambda x: x.status.phase == 'Running', pods))
@@ -93,7 +93,7 @@ class K8s:
 
     def pg_get_status(self, name="acid-minimal-cluster", namespace="default"):
         pg = self.api.custom_objects_api.get_namespaced_custom_object(
-            "acid.zalan.do", "v1", namespace, "postgresqls", name)
+            "acid.cosmic.rocks", "v1", namespace, "postgresqls", name)
         return pg.get("status", {}).get("PostgresClusterStatus", None)
 
     def wait_for_pod_start(self, pod_labels, namespace='default'):
@@ -137,7 +137,7 @@ class K8s:
             }
         }
         self.api.custom_objects_api.patch_namespaced_custom_object(
-            "acid.zalan.do", "v1", namespace, "postgresqls", name, body)
+            "acid.cosmic.rocks", "v1", namespace, "postgresqls", name, body)
 
     def wait_for_running_pods(self, labels, number, namespace=''):
         while self.count_pods_with_label(labels) != number:
@@ -178,7 +178,7 @@ class K8s:
 
     def count_pods_with_rolling_update_flag(self, labels, namespace='default'):
         pods = self.api.core_v1.list_namespaced_pod(namespace, label_selector=labels).items
-        return len(list(filter(lambda x: "zalando-postgres-operator-rolling-update-required" in x.metadata.annotations, pods)))
+        return len(list(filter(lambda x: "cosmicrocks-scdl8-rolling-update-required" in x.metadata.annotations, pods)))
 
     def count_pods_with_label(self, labels, namespace='default'):
         return len(self.api.core_v1.list_namespaced_pod(namespace, label_selector=labels).items)
@@ -221,7 +221,7 @@ class K8s:
                 new_pod_node = pods[0].spec.node_name
                 pod_phase = pods[0].status.phase
             time.sleep(self.RETRY_TIMEOUT_SEC)
-        
+
         while pods_with_update_flag != 0:
             pods_with_update_flag = self.count_pods_with_rolling_update_flag(labels, namespace)
             time.sleep(self.RETRY_TIMEOUT_SEC)
@@ -251,11 +251,11 @@ class K8s:
 
     def delete_operator_pod(self, step="Delete operator pod"):
         # patching the pod template in the deployment restarts the operator pod
-        self.api.apps_v1.patch_namespaced_deployment("postgres-operator", "default", {"spec": {"template": {"metadata": {"annotations": {"step": "{}-{}".format(step, time.time())}}}}})
+        self.api.apps_v1.patch_namespaced_deployment("scdl8", "default", {"spec": {"template": {"metadata": {"annotations": {"step": "{}-{}".format(step, time.time())}}}}})
         self.wait_for_operator_pod_start()
 
     def update_config(self, config_map_patch, step="Updating operator deployment"):
-        self.api.core_v1.patch_namespaced_config_map("postgres-operator", "default", config_map_patch)
+        self.api.core_v1.patch_namespaced_config_map("scdl8", "default", config_map_patch)
         self.delete_operator_pod(step=step)
 
     def patch_pod(self, data, pod_name, namespace="default"):
@@ -355,7 +355,7 @@ class K8s:
 
     def get_secret(self, username, clustername='acid-minimal-cluster', namespace='default'):
         secret = self.api.core_v1.read_namespaced_secret(
-                "{}.{}.credentials.postgresql.acid.zalan.do".format(username.replace("_","-"), clustername), namespace)
+                "{}.{}.credentials.postgresql.acid.cosmic.rocks".format(username.replace("_","-"), clustername), namespace)
         secret.metadata.resource_version = None
         secret.metadata.uid = None
         return secret
@@ -400,11 +400,11 @@ class K8sBase:
         return m, r
 
     def wait_for_operator_pod_start(self):
-        self.wait_for_pod_start("name=postgres-operator")
+        self.wait_for_pod_start("name=scdl8")
 
     def get_operator_pod(self):
         pods = self.api.core_v1.list_namespaced_pod(
-            'default', label_selector='name=postgres-operator'
+            'default', label_selector='name=scdl8'
         ).items
 
         if pods:
@@ -461,7 +461,7 @@ class K8sBase:
             }
         }
         self.api.custom_objects_api.patch_namespaced_custom_object(
-            "acid.zalan.do", "v1", namespace, "postgresqls", name, body)
+            "acid.cosmic.rocks", "v1", namespace, "postgresqls", name, body)
 
     def wait_for_running_pods(self, labels, number, namespace=''):
         while self.count_pods_with_label(labels) != number:
@@ -482,7 +482,7 @@ class K8sBase:
 
     def count_pods_with_rolling_update_flag(self, labels, namespace='default'):
         pods = self.api.core_v1.list_namespaced_pod(namespace, label_selector=labels).items
-        return len(list(filter(lambda x: "zalando-postgres-operator-rolling-update-required" in x.metadata.annotations, pods)))
+        return len(list(filter(lambda x: "cosmicrocks-scdl8-rolling-update-required" in x.metadata.annotations, pods)))
 
     def count_pods_with_label(self, labels, namespace='default'):
         return len(self.api.core_v1.list_namespaced_pod(namespace, label_selector=labels).items)
@@ -544,11 +544,11 @@ class K8sBase:
         self.wait_for_logical_backup_job(expected_num_of_jobs=1)
 
     def delete_operator_pod(self, step="Delete operator deplyment"):
-        self.api.apps_v1.patch_namespaced_deployment("postgres-operator","default", {"spec":{"template":{"metadata":{"annotations":{"step":"{}-{}".format(step, time.time())}}}}})
+        self.api.apps_v1.patch_namespaced_deployment("scdl8","default", {"spec":{"template":{"metadata":{"annotations":{"step":"{}-{}".format(step, time.time())}}}}})
         self.wait_for_operator_pod_start()
 
     def update_config(self, config_map_patch, step="Updating operator deployment"):
-        self.api.core_v1.patch_namespaced_config_map("postgres-operator", "default", config_map_patch)
+        self.api.core_v1.patch_namespaced_config_map("scdl8", "default", config_map_patch)
         self.delete_operator_pod(step=step)
 
     def create_with_kubectl(self, path):
@@ -604,7 +604,7 @@ class K8sBase:
 
 
 class K8sOperator(K8sBase):
-    def __init__(self, labels="name=postgres-operator", namespace="default"):
+    def __init__(self, labels="name=scdl8", namespace="default"):
         super().__init__(labels, namespace)
 
 

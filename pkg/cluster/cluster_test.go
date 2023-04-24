@@ -7,16 +7,16 @@ import (
 	"strings"
 	"testing"
 
+	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	fakeacidv1 "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/fake"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
+	"github.com/cosmicrocks/scdl8/pkg/util"
+	"github.com/cosmicrocks/scdl8/pkg/util/config"
+	"github.com/cosmicrocks/scdl8/pkg/util/constants"
+	"github.com/cosmicrocks/scdl8/pkg/util/k8sutil"
+	"github.com/cosmicrocks/scdl8/pkg/util/teams"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
-	acidv1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	fakeacidv1 "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/fake"
-	"github.com/zalando/postgres-operator/pkg/spec"
-	"github.com/zalando/postgres-operator/pkg/util"
-	"github.com/zalando/postgres-operator/pkg/util/config"
-	"github.com/zalando/postgres-operator/pkg/util/constants"
-	"github.com/zalando/postgres-operator/pkg/util/k8sutil"
-	"github.com/zalando/postgres-operator/pkg/util/teams"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
@@ -247,7 +247,7 @@ func TestInitHumanUsers(t *testing.T) {
 	cl.OpConfig.EnableTeamSuperuser = true
 	cl.OpConfig.EnableTeamsAPI = true
 	cl.OpConfig.EnableTeamMemberDeprecation = true
-	cl.OpConfig.PamRoleName = "zalandos"
+	cl.OpConfig.PamRoleName = "cosmics"
 	cl.Spec.TeamID = "test"
 	cl.Spec.Users = map[string]acidv1.UserFlags{"bar": []string{}}
 
@@ -335,7 +335,7 @@ func TestInitHumanUsersWithSuperuserTeams(t *testing.T) {
 	cl.OpConfig.EnableTeamSuperuser = false
 
 	cl.OpConfig.EnableTeamsAPI = true
-	cl.OpConfig.PamRoleName = "zalandos"
+	cl.OpConfig.PamRoleName = "cosmics"
 
 	teamA := mockTeam{
 		teamID:                  "postgres_superusers",
@@ -1244,15 +1244,15 @@ func TestCompareServices(t *testing.T) {
 			about: "two equal services",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeClusterIP,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeClusterIP,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
@@ -1262,15 +1262,15 @@ func TestCompareServices(t *testing.T) {
 			about: "services differ on service type",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeClusterIP,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
@@ -1281,15 +1281,15 @@ func TestCompareServices(t *testing.T) {
 			about: "services differ on lb source ranges",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"185.249.56.0/22"}),
@@ -1300,15 +1300,15 @@ func TestCompareServices(t *testing.T) {
 			about: "new service doesn't have lb source ranges",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{}),
@@ -1319,34 +1319,34 @@ func TestCompareServices(t *testing.T) {
 			about: "services differ on DNS annotation",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "new_clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "new_clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			match:  false,
-			reason: `new service's annotations does not match the current one: "external-dns.alpha.kubernetes.io/hostname" changed from "clstr.acid.zalan.do" to "new_clstr.acid.zalan.do".`,
+			reason: `new service's annotations does not match the current one: "external-dns.alpha.kubernetes.io/hostname" changed from "clstr.acid.cosmic.rocks" to "new_clstr.acid.cosmic.rocks".`,
 		},
 		{
 			about: "services differ on AWS ELB annotation",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: "1800",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     "1800",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
@@ -1357,17 +1357,17 @@ func TestCompareServices(t *testing.T) {
 			about: "service changes existing annotation",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
-					"foo":                              "bar",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
+					"foo":                                  "bar",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
-					"foo":                              "baz",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
+					"foo":                                  "baz",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
@@ -1378,19 +1378,19 @@ func TestCompareServices(t *testing.T) {
 			about: "service changes multiple existing annotations",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
-					"foo":                              "bar",
-					"bar":                              "foo",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
+					"foo":                                  "bar",
+					"bar":                                  "foo",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
-					"foo":                              "baz",
-					"bar":                              "fooz",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
+					"foo":                                  "baz",
+					"bar":                                  "fooz",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
@@ -1402,16 +1402,16 @@ func TestCompareServices(t *testing.T) {
 			about: "service adds a new custom annotation",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
-					"foo":                              "bar",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
+					"foo":                                  "bar",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
@@ -1422,16 +1422,16 @@ func TestCompareServices(t *testing.T) {
 			about: "service removes a custom annotation",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
-					"foo":                              "bar",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
+					"foo":                                  "bar",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
@@ -1442,17 +1442,17 @@ func TestCompareServices(t *testing.T) {
 			about: "service removes a custom annotation and adds a new one",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
-					"foo":                              "bar",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
+					"foo":                                  "bar",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
-					"bar":                              "foo",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
+					"bar":                                  "foo",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
@@ -1463,19 +1463,19 @@ func TestCompareServices(t *testing.T) {
 			about: "service removes a custom annotation, adds a new one and change another",
 			current: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
-					"foo":                              "bar",
-					"zalan":                            "do",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
+					"foo":                                  "bar",
+					"zalan":                                "do",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
-					"bar":                              "foo",
-					"zalan":                            "do.com",
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
+					"bar":                                  "foo",
+					"zalan":                                "do.com",
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
@@ -1491,8 +1491,8 @@ func TestCompareServices(t *testing.T) {
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),
 			new: newService(
 				map[string]string{
-					constants.ZalandoDNSNameAnnotation: "clstr.acid.zalan.do",
-					constants.ElbTimeoutAnnotationName: constants.ElbTimeoutAnnotationValue,
+					constants.CosmicRocksDNSNameAnnotation: "clstr.acid.cosmic.rocks",
+					constants.ElbTimeoutAnnotationName:     constants.ElbTimeoutAnnotationValue,
 				},
 				v1.ServiceTypeLoadBalancer,
 				[]string{"128.141.0.0/16", "137.138.0.0/16"}),

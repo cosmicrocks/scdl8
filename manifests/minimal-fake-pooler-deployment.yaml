@@ -20,10 +20,10 @@ spec:
         connection-pooler: acid-minimal-cluster-pooler
         cluster-name: acid-minimal-cluster
     spec:
-      serviceAccountName: postgres-operator
+      serviceAccountName: scdl8
       containers:
-      - name: postgres-operator
-        image: registry.opensource.zalan.do/acid/pgbouncer:master-27
+      - name: scdl8
+        image: registry.opensource.cosmic.rocks/acid/pgbouncer:master-27
         imagePullPolicy: IfNotPresent
         resources:
           requests:

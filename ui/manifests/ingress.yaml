@@ -1,10 +1,10 @@
 apiVersion: "networking.k8s.io/v1"
 kind: "Ingress"
 metadata:
-  name: "postgres-operator-ui"
+  name: "scdl8-ui"
   namespace: "default"
   labels:
-    application: "postgres-operator-ui"
+    application: "scdl8-ui"
 spec:
   # ingressClassName: "ingress-nginx"
   rules:
@@ -15,6 +15,6 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: "postgres-operator-ui"
+                name: "scdl8-ui"
                 port:
                   number: 80

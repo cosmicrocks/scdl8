@@ -159,8 +159,8 @@ postgresql
             jQuery.get(
               './services/' + this.cluster_path,
             ).done(data => {
-              if (data.metadata && data.metadata.annotations && 'zalando.org/dnsname' in data.metadata.annotations) {
-                this.progress.dnsName = data.metadata.annotations['zalando.org/dnsname']
+              if (data.metadata && data.metadata.annotations && 'cosmic.rocks/dnsname' in data.metadata.annotations) {
+                this.progress.dnsName = data.metadata.annotations['cosmic.rocks/dnsname']
               } else if (data.metadata && data.metadata.annotations && 'external-dns.alpha.kubernetes.io/hostname' in data.metadata.annotations) {
                 this.progress.dnsName = data.metadata.annotations['external-dns.alpha.kubernetes.io/hostname']
               } else {
@@ -176,8 +176,8 @@ postgresql
                   jQuery.get(
                     './services/' + this.cluster_path + "-pooler",
                   ).done(data => {
-                    if (data.metadata && data.metadata.annotations && 'zalando.org/dnsname' in data.metadata.annotations) {
-                      this.progress.poolerDnsName = data.metadata.annotations['zalando.org/dnsname']
+                    if (data.metadata && data.metadata.annotations && 'cosmic.rocks/dnsname' in data.metadata.annotations) {
+                      this.progress.poolerDnsName = data.metadata.annotations['cosmic.rocks/dnsname']
                     } else if (data.metadata && data.metadata.annotations && 'external-dns.alpha.kubernetes.io/hostname' in data.metadata.annotations) {
                       this.progress.poolerDnsName = data.metadata.annotations['external-dns.alpha.kubernetes.io/hostname']
                     } else {

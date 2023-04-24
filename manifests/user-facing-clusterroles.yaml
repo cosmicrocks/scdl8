@@ -3,10 +3,10 @@ kind: ClusterRole
 metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
-  name: zalando-postgres-operator:users:admin
+  name: cosmicrocks-scdl8:users:admin
 rules:
 - apiGroups:
-  - acid.zalan.do
+  - acid.cosmic.rocks
   resources:
   - postgresqls
   - postgresqls/status
@@ -26,10 +26,10 @@ kind: ClusterRole
 metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
-  name: zalando-postgres-operator:users:edit
+  name: cosmicrocks-scdl8:users:edit
 rules:
 - apiGroups:
-  - acid.zalan.do
+  - acid.cosmic.rocks
   resources:
   - postgresqls
   verbs:
@@ -44,10 +44,10 @@ kind: ClusterRole
 metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
-  name: zalando-postgres-operator:users:view
+  name: cosmicrocks-scdl8:users:view
 rules:
 - apiGroups:
-  - acid.zalan.do
+  - acid.cosmic.rocks
   resources:
   - postgresqls
   - postgresqls/status

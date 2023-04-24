@@ -11,11 +11,11 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/tools/remotecommand"
 
-	"github.com/zalando/postgres-operator/pkg/spec"
-	"github.com/zalando/postgres-operator/pkg/util/constants"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
+	"github.com/cosmicrocks/scdl8/pkg/util/constants"
 )
 
-//ExecCommand executes arbitrary command inside the pod
+// ExecCommand executes arbitrary command inside the pod
 func (c *Cluster) ExecCommand(podName *spec.NamespacedName, command ...string) (string, error) {
 	c.setProcessName("executing command %q", strings.Join(command, " "))
 

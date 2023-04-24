@@ -8,13 +8,13 @@ environment.
 On startup, the operator will try to register the necessary
 [CustomResourceDefinitions](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/#customresourcedefinitions)
 `Postgresql` and `OperatorConfiguration`. The latter will only get created if
-the `POSTGRES_OPERATOR_CONFIGURATION_OBJECT` [environment variable](https://github.com/zalando/postgres-operator/blob/master/manifests/postgres-operator.yaml#L36)
+the `POSTGRES_OPERATOR_CONFIGURATION_OBJECT` [environment variable](https://github.com/cosmicrocks/scdl8/blob/master/manifests/scdl8.yaml#L36)
 is set in the deployment yaml and is not empty. If the CRDs already exists they
 will only be patched. If you do not wish the operator to create or update the
 CRDs set `enable_crd_registration` config option to `false`.
 
 CRDs are defined with a `openAPIV3Schema` structural schema against which new
-manifests of [`postgresql`](https://github.com/zalando/postgres-operator/blob/master/manifests/postgresql.crd.yaml) or [`OperatorConfiguration`](https://github.com/zalando/postgres-operator/blob/master/manifests/operatorconfiguration.crd.yaml)
+manifests of [`postgresql`](https://github.com/cosmicrocks/scdl8/blob/master/manifests/postgresql.crd.yaml) or [`OperatorConfiguration`](https://github.com/cosmicrocks/scdl8/blob/master/manifests/operatorconfiguration.crd.yaml)
 resources will be validated. On creation you can bypass the validation with
 `kubectl create --validate=false`.
 
@@ -66,7 +66,7 @@ In-place major version upgrades can be configured to be executed by the
 operator with the `major_version_upgrade_mode` option. By default it is set
 to `off` which means the cluster version will not change when increased in
 the manifest. Still, a rolling update would be triggered updating the
-`PGVERSION` variable. But Spilo's [`configure_spilo`](https://github.com/zalando/spilo/blob/master/postgres-appliance/scripts/configure_spilo.py)
+`PGVERSION` variable. But Spilo's [`configure_spilo`](https://github.com/cosmicrocks/spilo/blob/master/postgres-appliance/scripts/configure_spilo.py)
 script will notice the version mismatch and start the old version again.
 
 In this scenario the major version could then be run by a user from within the
@@ -74,10 +74,10 @@ master pod. Exec into the container and run:
 ```bash
 python3 /scripts/inplace_upgrade.py N
 ```
-where `N` is the number of members of your cluster (see [`numberOfInstances`](https://github.com/zalando/postgres-operator/blob/50cb5898ea715a1db7e634de928b2d16dc8cd969/manifests/minimal-postgres-manifest.yaml#L10)).
+where `N` is the number of members of your cluster (see [`numberOfInstances`](https://github.com/cosmicrocks/scdl8/blob/50cb5898ea715a1db7e634de928b2d16dc8cd969/manifests/minimal-postgres-manifest.yaml#L10)).
 The upgrade is usually fast, well under one minute for most DBs. Note, that
 changes become irrevertible once `pg_upgrade` is called. To understand the
-upgrade procedure, refer to the [corresponding PR in Spilo](https://github.com/zalando/spilo/pull/488).
+upgrade procedure, refer to the [corresponding PR in Spilo](https://github.com/cosmicrocks/spilo/pull/488).
 
 When `major_version_upgrade_mode` is set to `manual` the operator will run
 the upgrade script for you after the manifest is updated and pods are rotated.
@@ -104,7 +104,7 @@ kubectl config set-context $(kubectl config current-context) --namespace=test
 All subsequent `kubectl` commands will work with the `test` namespace. The
 operator will run in this namespace and look up needed resources - such as its
 ConfigMap - there. Please note that the namespace for service accounts and
-cluster role bindings in [operator RBAC rules](https://github.com/zalando/postgres-operator/blob/master/manifests/operator-service-account-rbac.yaml)
+cluster role bindings in [operator RBAC rules](https://github.com/cosmicrocks/scdl8/blob/master/manifests/operator-service-account-rbac.yaml)
 needs to be adjusted to the non-default value.
 
 ### Specify the namespace to watch
@@ -115,9 +115,9 @@ clusters in the namespace such as "increase the number of Postgres replicas to
 
 By default, the operator watches the namespace it is deployed to. You can
 change this by setting the `WATCHED_NAMESPACE` var in the `env` section of the
-[operator deployment](https://github.com/zalando/postgres-operator/blob/master/manifests/postgres-operator.yaml) manifest or by
+[operator deployment](https://github.com/cosmicrocks/scdl8/blob/master/manifests/scdl8.yaml) manifest or by
 altering the `watched_namespace` field in the operator
-[configuration](https://github.com/zalando/postgres-operator/blob/master/manifests/postgresql-operator-default-configuration.yaml#L49).
+[configuration](https://github.com/cosmicrocks/scdl8/blob/master/manifests/postgresql-operator-default-configuration.yaml#L49).
 In the case both are set, the env var takes the precedence. To make the
 operator listen to all namespaces, explicitly set the field/env var to "`*`".
 
@@ -138,18 +138,18 @@ But, it is also possible to define ownership between operator instances and
 Postgres clusters running all in the same namespace or K8s cluster without
 interfering.
 
-First, define the [`CONTROLLER_ID`](https://github.com/zalando/postgres-operator/blob/master/manifests/postgres-operator.yaml#L38)
+First, define the [`CONTROLLER_ID`](https://github.com/cosmicrocks/scdl8/blob/master/manifests/scdl8.yaml#L38)
 environment variable in the operator deployment manifest. Then specify the ID
 in every Postgres cluster manifest you want this operator to watch using the
-`"acid.zalan.do/controller"` annotation:
+`"acid.cosmic.rocks/controller"` annotation:
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: demo-cluster
   annotations:
-    "acid.zalan.do/controller": "second-operator"
+    "acid.cosmic.rocks/controller": "second-operator"
 spec:
   ...
 ```
@@ -196,13 +196,13 @@ current date (in YYYY-MM-DD format). The name of the annotation keys can be
 defined in the configuration. By default, they are not set which disables the
 delete protection. Thus, one could choose to only go with one annotation.
 
-**postgres-operator ConfigMap**
+**scdl8 ConfigMap**
 
 ```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-operator
+  name: scdl8
 data:
   delete_annotation_date_key: "delete-date"
   delete_annotation_name_key: "delete-clustername"
@@ -211,7 +211,7 @@ data:
 **OperatorConfiguration**
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
   name: postgresql-operator-configuration
@@ -230,7 +230,7 @@ met.
 **cluster manifest**
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: demo-cluster
@@ -251,7 +251,7 @@ update of the pods because the UID is used as part of backup path to S3.
 
 ## Role-based access control for the operator
 
-The manifest [`operator-service-account-rbac.yaml`](https://github.com/zalando/postgres-operator/blob/master/manifests/operator-service-account-rbac.yaml)
+The manifest [`operator-service-account-rbac.yaml`](https://github.com/cosmicrocks/scdl8/blob/master/manifests/operator-service-account-rbac.yaml)
 defines the service account, cluster roles and bindings needed for the operator
 to function under access control restrictions. The file also includes a cluster
 role `postgres-pod` with privileges for Patroni to watch and manage pods and
@@ -260,7 +260,7 @@ endpoints. To deploy the operator with this RBAC policies use:
 ```bash
 kubectl create -f manifests/configmap.yaml
 kubectl create -f manifests/operator-service-account-rbac.yaml
-kubectl create -f manifests/postgres-operator.yaml
+kubectl create -f manifests/scdl8.yaml
 kubectl create -f manifests/minimal-postgres-manifest.yaml
 ```
 
@@ -283,7 +283,7 @@ the `user-facing-clusterrole` manifest:
 kubectl create -f manifests/user-facing-clusterroles.yaml
 ```
 
-It creates zalando-postgres-operator:user:view, :edit and :admin clusterroles
+It creates cosmicrocks-scdl8:user:view, :edit and :admin clusterroles
 that are aggregated into the K8s [default roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#default-roles-and-role-bindings).
 
 For Helm deployments setting `rbac.createAggregateClusterRoles: true` adds these clusterroles to the deployment.
@@ -385,7 +385,7 @@ to the ConfigMap:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-operator
+  name: scdl8
 data:
   toleration: "key:postgres,operator:Exists,effect:NoSchedule"
 ```
@@ -394,7 +394,7 @@ For an OperatorConfiguration resource the toleration should be defined like
 this:
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
   name: postgresql-configuration
@@ -423,13 +423,13 @@ specified in the configuration (option name is in singular form):
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-operator
+  name: scdl8
 data:
   node_readiness_label: "status1:ready,status2:ready"
 ```
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
   name: postgresql-configuration
@@ -499,7 +499,7 @@ Enable pod anti affinity by adding following line to the operator ConfigMap:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-operator
+  name: scdl8
 data:
   enable_pod_antiaffinity: "true"
 ```
@@ -507,7 +507,7 @@ data:
 Likewise, when using an OperatorConfiguration resource add:
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
   name: postgresql-configuration
@@ -538,7 +538,7 @@ The PDB is only relaxed in two scenarios:
 The PDB is still in place having `MinAvailable` set to `0`. If enabled it will
 be automatically set to `1` on scale up. Disabling PDBs helps avoiding blocking
 Kubernetes upgrades in managed K8s environments at the cost of prolonged DB
-downtime. See PR [#384](https://github.com/zalando/postgres-operator/pull/384)
+downtime. See PR [#384](https://github.com/cosmicrocks/scdl8/pull/384)
 for the use case.
 
 ## Add cluster-specific labels
@@ -548,13 +548,13 @@ Postgres cluster, in order to identify its child objects. The typical use case
 is to add labels that identifies the `Pods` created by the operator, in order
 to implement fine-controlled `NetworkPolicies`.
 
-**postgres-operator ConfigMap**
+**scdl8 ConfigMap**
 
 ```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-operator
+  name: scdl8
 data:
   inherited_labels: application,environment
 ```
@@ -562,7 +562,7 @@ data:
 **OperatorConfiguration**
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
   name: postgresql-operator-configuration
@@ -576,7 +576,7 @@ configuration:
 **cluster manifest**
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: demo-cluster
@@ -646,13 +646,13 @@ out, the configured default namespace of your K8s client will be used and if
 the ConfigMap is not found there, the Postgres cluster's namespace is taken
 when different:
 
-**postgres-operator ConfigMap**
+**scdl8 ConfigMap**
 
 ```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-operator
+  name: scdl8
 data:
   # referencing config map with custom settings
   pod_environment_configmap: default/postgres-pod-config
@@ -661,7 +661,7 @@ data:
 **OperatorConfiguration**
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
   name: postgresql-operator-configuration
@@ -693,13 +693,13 @@ configuration. To protect the values of the secret from being exposed in the
 pod spec they are each referenced as SecretKeyRef. This does not allow for the
 secret to be in a different namespace as the pods though
 
-**postgres-operator ConfigMap**
+**scdl8 ConfigMap**
 
 ```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-operator
+  name: scdl8
 data:
   # referencing secret with custom environment variables
   pod_environment_secret: postgres-pod-secrets
@@ -708,7 +708,7 @@ data:
 **OperatorConfiguration**
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
   name: postgresql-operator-configuration
@@ -741,7 +741,7 @@ manifest to configure it individually. The variables must be listed under the
 Global parameters served from a custom config map or secret will be overridden.
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: acid-test-cluster
@@ -908,7 +908,7 @@ You can also check if Spilo is able to find any backups:
 envdir "/run/etc/wal-e.d/env" wal-g backup-list
 ```
 
-Depending on the cloud storage provider different [environment variables](https://github.com/zalando/spilo/blob/master/ENVIRONMENT.rst)
+Depending on the cloud storage provider different [environment variables](https://github.com/cosmicrocks/spilo/blob/master/ENVIRONMENT.rst)
 have to be set for Spilo. Not all of them are generated automatically by the
 operator by changing its configuration. In this case you have to use an
 [extra configmap or secret](#custom-pod-environment-variables).
@@ -918,13 +918,13 @@ operator by changing its configuration. In this case you have to use an
 When using AWS you have to reference the S3 backup path, the IAM role and the
 AWS region in the configuration.
 
-**postgres-operator ConfigMap**
+**scdl8 ConfigMap**
 
 ```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-operator
+  name: scdl8
 data:
   aws_region: eu-central-1
   kube_iam_role: postgres-pod-role
@@ -934,7 +934,7 @@ data:
 **OperatorConfiguration**
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
   name: postgresql-operator-configuration
@@ -1035,7 +1035,7 @@ metadata:
 
 If using manual deployment or kustomize, this is done by setting
 `pod_service_account_name` in your configuration file specified in the
-[postgres-operator deployment](../manifests/postgres-operator.yaml#L37)
+[scdl8 deployment](../manifests/scdl8.yaml#L37)
 
 If deploying the operator [using Helm](./quickstart.md#helm-chart), this can
 be specified in the chart's values file, e.g.:
@@ -1121,7 +1121,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pod-env-overrides
-  namespace: postgres-operator-system
+  namespace: scdl8-system
 data:
   # Any env variable used by spilo can be added
   USE_WALG_BACKUP: "true"
@@ -1129,11 +1129,11 @@ data:
   CLONE_USE_WALG_RESTORE: "true"
 ```
 
-2. Then provide this configmap in postgres-operator settings:
+2. Then provide this configmap in scdl8 settings:
 ```yml
 ...
 # namespaced name of the ConfigMap with environment variables to populate on every pod
-pod_environment_configmap: "postgres-operator-system/pod-env-overrides"
+pod_environment_configmap: "scdl8-system/pod-env-overrides"
 ...
 ```
 
@@ -1154,7 +1154,7 @@ create postgresql clusters.
 
 The latest version of WAL-G (v1.0) supports the use of a SASS token, but you'll
 have to make due with using the primary or secondary access token until the
-version of WAL-G is updated in the postgres-operator.
+version of WAL-G is updated in the scdl8.
 
 ```yaml
 apiVersion: v1
@@ -1174,7 +1174,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pod-env-overrides
-  namespace: postgres-operator-system
+  namespace: scdl8-system
 data:
   # Any env variable used by spilo can be added
   USE_WALG_BACKUP: "true"
@@ -1190,7 +1190,7 @@ is set up like the following:
 ...
 kubernetes:
   pod_environment_secret: "psql-backup-creds"
-  pod_environment_configmap: "postgres-operator-system/pod-env-overrides"
+  pod_environment_configmap: "scdl8-system/pod-env-overrides"
 aws_or_gcp:
   wal_az_storage_account: "postgresbackupsbucket28302F2"  # name of storage account to save the WAL-G logs
 ...
@@ -1249,7 +1249,7 @@ schedule changes; the job name acts as the job identifier. These jobs are to
 be enabled for each individual Postgres cluster by updating the manifest:
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: demo-cluster
@@ -1266,7 +1266,7 @@ but only snapshots of your data. In its current state, see logical backups as a
 way to quickly create SQL dumps that you can easily restore in an empty test
 cluster.
 
-2. The [example image](https://github.com/zalando/postgres-operator/blob/master/docker/logical-backup/Dockerfile) implements the backup
+2. The [example image](https://github.com/cosmicrocks/scdl8/blob/master/docker/logical-backup/Dockerfile) implements the backup
 via `pg_dumpall` and upload of compressed and encrypted results to an S3 bucket.
 `pg_dumpall` requires a `superuser` access to a DB and runs on the replica when
 possible.
@@ -1285,7 +1285,7 @@ of the backup cron job.
 
 6. For that feature to work, your RBAC policy must enable operations on the
 `cronjobs` resource from the `batch` API group for the operator service account.
-See [example RBAC](https://github.com/zalando/postgres-operator/blob/master/manifests/operator-service-account-rbac.yaml)
+See [example RBAC](https://github.com/cosmicrocks/scdl8/blob/master/manifests/operator-service-account-rbac.yaml)
 
 7. Resources of the pod template in the cron job can be configured. When left
 empty [default values of spilo pods](reference/operator_parameters.md#kubernetes-resource-requests)
@@ -1343,8 +1343,8 @@ default. Alternatively, a list can also be passed when starting the Python
 application with the `--cluster` option.
 
 The Operator API endpoint can be configured via the `OPERATOR_API_URL`
-environment variables in the [deployment manifest](https://github.com/zalando/postgres-operator/blob/master/ui/manifests/deployment.yaml#L40).
-You can also expose the operator API through a [service](https://github.com/zalando/postgres-operator/blob/master/manifests/api-service.yaml).
+environment variables in the [deployment manifest](https://github.com/cosmicrocks/scdl8/blob/master/ui/manifests/deployment.yaml#L40).
+You can also expose the operator API through a [service](https://github.com/cosmicrocks/scdl8/blob/master/manifests/api-service.yaml).
 Some displayed options can be disabled from UI using simple flags under the
 `OPERATOR_UI_CONFIG` field in the deployment.
 
@@ -1357,7 +1357,7 @@ the operator and the UI are both running.
 
 ```bash
 sed -e "s/\(image\:.*\:\).*$/\1$TAG/" manifests/deployment.yaml | kubectl apply -f manifests/
-kubectl get all -l application=postgres-operator-ui
+kubectl get all -l application=scdl8-ui
 ```
 
 ### Local testing
@@ -1380,7 +1380,7 @@ make docker
 
 # build in image in minikube docker env
 eval $(minikube docker-env)
-docker build -t registry.opensource.zalan.do/acid/postgres-operator-ui:v1.8.1 .
+docker build -t registry.opensource.cosmic.rocks/acid/scdl8-ui:v1.8.1 .
 
 # apply UI manifests next to a running Postgres Operator
 kubectl apply -f manifests/

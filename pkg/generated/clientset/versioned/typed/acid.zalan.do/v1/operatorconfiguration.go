@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,8 @@ package v1
 import (
 	"context"
 
-	acidzalandov1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	scheme "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/scheme"
+	acidcosmicv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	scheme "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	rest "k8s.io/client-go/rest"
 )
@@ -41,7 +41,7 @@ type OperatorConfigurationsGetter interface {
 
 // OperatorConfigurationInterface has methods to work with OperatorConfiguration resources.
 type OperatorConfigurationInterface interface {
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*acidzalandov1.OperatorConfiguration, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*acidcosmicv1.OperatorConfiguration, error)
 	OperatorConfigurationExpansion
 }
 
@@ -60,8 +60,8 @@ func newOperatorConfigurations(c *AcidV1Client, namespace string) *operatorConfi
 }
 
 // Get takes name of the operatorConfiguration, and returns the corresponding operatorConfiguration object, and an error if there is any.
-func (c *operatorConfigurations) Get(ctx context.Context, name string, options v1.GetOptions) (result *acidzalandov1.OperatorConfiguration, err error) {
-	result = &acidzalandov1.OperatorConfiguration{}
+func (c *operatorConfigurations) Get(ctx context.Context, name string, options v1.GetOptions) (result *acidcosmicv1.OperatorConfiguration, err error) {
+	result = &acidcosmicv1.OperatorConfiguration{}
 	err = c.client.Get().
 		Namespace(c.ns).
 		Resource("operatorconfigurations").

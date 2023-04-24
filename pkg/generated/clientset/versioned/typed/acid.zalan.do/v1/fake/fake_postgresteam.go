@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ package fake
 import (
 	"context"
 
-	acidzalandov1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
+	acidcosmicv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -42,25 +42,25 @@ type FakePostgresTeams struct {
 	ns   string
 }
 
-var postgresteamsResource = schema.GroupVersionResource{Group: "acid.zalan.do", Version: "v1", Resource: "postgresteams"}
+var postgresteamsResource = schema.GroupVersionResource{Group: "acid.cosmic.rocks", Version: "v1", Resource: "postgresteams"}
 
-var postgresteamsKind = schema.GroupVersionKind{Group: "acid.zalan.do", Version: "v1", Kind: "PostgresTeam"}
+var postgresteamsKind = schema.GroupVersionKind{Group: "acid.cosmic.rocks", Version: "v1", Kind: "PostgresTeam"}
 
 // Get takes name of the postgresTeam, and returns the corresponding postgresTeam object, and an error if there is any.
-func (c *FakePostgresTeams) Get(ctx context.Context, name string, options v1.GetOptions) (result *acidzalandov1.PostgresTeam, err error) {
+func (c *FakePostgresTeams) Get(ctx context.Context, name string, options v1.GetOptions) (result *acidcosmicv1.PostgresTeam, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewGetAction(postgresteamsResource, c.ns, name), &acidzalandov1.PostgresTeam{})
+		Invokes(testing.NewGetAction(postgresteamsResource, c.ns, name), &acidcosmicv1.PostgresTeam{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*acidzalandov1.PostgresTeam), err
+	return obj.(*acidcosmicv1.PostgresTeam), err
 }
 
 // List takes label and field selectors, and returns the list of PostgresTeams that match those selectors.
-func (c *FakePostgresTeams) List(ctx context.Context, opts v1.ListOptions) (result *acidzalandov1.PostgresTeamList, err error) {
+func (c *FakePostgresTeams) List(ctx context.Context, opts v1.ListOptions) (result *acidcosmicv1.PostgresTeamList, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewListAction(postgresteamsResource, postgresteamsKind, c.ns, opts), &acidzalandov1.PostgresTeamList{})
+		Invokes(testing.NewListAction(postgresteamsResource, postgresteamsKind, c.ns, opts), &acidcosmicv1.PostgresTeamList{})
 
 	if obj == nil {
 		return nil, err
@@ -70,8 +70,8 @@ func (c *FakePostgresTeams) List(ctx context.Context, opts v1.ListOptions) (resu
 	if label == nil {
 		label = labels.Everything()
 	}
-	list := &acidzalandov1.PostgresTeamList{ListMeta: obj.(*acidzalandov1.PostgresTeamList).ListMeta}
-	for _, item := range obj.(*acidzalandov1.PostgresTeamList).Items {
+	list := &acidcosmicv1.PostgresTeamList{ListMeta: obj.(*acidcosmicv1.PostgresTeamList).ListMeta}
+	for _, item := range obj.(*acidcosmicv1.PostgresTeamList).Items {
 		if label.Matches(labels.Set(item.Labels)) {
 			list.Items = append(list.Items, item)
 		}
@@ -87,31 +87,31 @@ func (c *FakePostgresTeams) Watch(ctx context.Context, opts v1.ListOptions) (wat
 }
 
 // Create takes the representation of a postgresTeam and creates it.  Returns the server's representation of the postgresTeam, and an error, if there is any.
-func (c *FakePostgresTeams) Create(ctx context.Context, postgresTeam *acidzalandov1.PostgresTeam, opts v1.CreateOptions) (result *acidzalandov1.PostgresTeam, err error) {
+func (c *FakePostgresTeams) Create(ctx context.Context, postgresTeam *acidcosmicv1.PostgresTeam, opts v1.CreateOptions) (result *acidcosmicv1.PostgresTeam, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewCreateAction(postgresteamsResource, c.ns, postgresTeam), &acidzalandov1.PostgresTeam{})
+		Invokes(testing.NewCreateAction(postgresteamsResource, c.ns, postgresTeam), &acidcosmicv1.PostgresTeam{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*acidzalandov1.PostgresTeam), err
+	return obj.(*acidcosmicv1.PostgresTeam), err
 }
 
 // Update takes the representation of a postgresTeam and updates it. Returns the server's representation of the postgresTeam, and an error, if there is any.
-func (c *FakePostgresTeams) Update(ctx context.Context, postgresTeam *acidzalandov1.PostgresTeam, opts v1.UpdateOptions) (result *acidzalandov1.PostgresTeam, err error) {
+func (c *FakePostgresTeams) Update(ctx context.Context, postgresTeam *acidcosmicv1.PostgresTeam, opts v1.UpdateOptions) (result *acidcosmicv1.PostgresTeam, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewUpdateAction(postgresteamsResource, c.ns, postgresTeam), &acidzalandov1.PostgresTeam{})
+		Invokes(testing.NewUpdateAction(postgresteamsResource, c.ns, postgresTeam), &acidcosmicv1.PostgresTeam{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*acidzalandov1.PostgresTeam), err
+	return obj.(*acidcosmicv1.PostgresTeam), err
 }
 
 // Delete takes name of the postgresTeam and deletes it. Returns an error if one occurs.
 func (c *FakePostgresTeams) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteActionWithOptions(postgresteamsResource, c.ns, name, opts), &acidzalandov1.PostgresTeam{})
+		Invokes(testing.NewDeleteActionWithOptions(postgresteamsResource, c.ns, name, opts), &acidcosmicv1.PostgresTeam{})
 
 	return err
 }
@@ -120,17 +120,17 @@ func (c *FakePostgresTeams) Delete(ctx context.Context, name string, opts v1.Del
 func (c *FakePostgresTeams) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
 	action := testing.NewDeleteCollectionAction(postgresteamsResource, c.ns, listOpts)
 
-	_, err := c.Fake.Invokes(action, &acidzalandov1.PostgresTeamList{})
+	_, err := c.Fake.Invokes(action, &acidcosmicv1.PostgresTeamList{})
 	return err
 }
 
 // Patch applies the patch and returns the patched postgresTeam.
-func (c *FakePostgresTeams) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *acidzalandov1.PostgresTeam, err error) {
+func (c *FakePostgresTeams) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *acidcosmicv1.PostgresTeam, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(postgresteamsResource, c.ns, name, pt, data, subresources...), &acidzalandov1.PostgresTeam{})
+		Invokes(testing.NewPatchSubresourceAction(postgresteamsResource, c.ns, name, pt, data, subresources...), &acidcosmicv1.PostgresTeam{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*acidzalandov1.PostgresTeam), err
+	return obj.(*acidcosmicv1.PostgresTeam), err
 }

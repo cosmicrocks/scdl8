@@ -2,16 +2,16 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "postgres-operator.serviceAccountName" . }}
+  name: {{ include "scdl8.serviceAccountName" . }}
   labels:
-    app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
-    helm.sh/chart: {{ template "postgres-operator.chart" . }}
+    app.kubernetes.io/name: {{ template "scdl8.name" . }}
+    helm.sh/chart: {{ template "scdl8.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 rules:
 # all verbs allowed for custom operator resources
 - apiGroups:
-  - acid.zalan.do
+  - acid.cosmic.rocks
   resources:
   - postgresqls
   - postgresqls/status
@@ -27,7 +27,7 @@ rules:
   - watch
 # operator only reads PostgresTeams
 - apiGroups:
-  - acid.zalan.do
+  - acid.cosmic.rocks
   resources:
   - postgresteams
   verbs:
@@ -37,7 +37,7 @@ rules:
 # all verbs allowed for event streams
 {{- if .Values.enableStreams }}
 - apiGroups:
-  - zalando.org
+  - cosmic.rocks
   resources:
   - fabriceventstreams
   verbs:

@@ -1,8 +1,8 @@
 package teams
 
 import (
-	acidv1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	"github.com/zalando/postgres-operator/pkg/util"
+	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	"github.com/cosmicrocks/scdl8/pkg/util"
 )
 
 // PostgresTeamMap is the operator's internal representation of all PostgresTeam CRDs

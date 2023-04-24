@@ -1,6 +1,6 @@
 version: "2017-09-20"
 pipeline:
-    - id: build-postgres-operator
+    - id: build-scdl8
       type: script
       vm: large
       cache:
@@ -27,9 +27,9 @@ pipeline:
             IS_PR_BUILD=${CDP_PULL_REQUEST_NUMBER+"true"}
             if [[ ${CDP_TARGET_BRANCH} == "master" && ${IS_PR_BUILD} != "true" ]]
             then
-              IMAGE=registry-write.opensource.zalan.do/acid/postgres-operator
+              IMAGE=registry-write.opensource.cosmic.rocks/acid/scdl8
             else
-              IMAGE=registry-write.opensource.zalan.do/acid/postgres-operator-test
+              IMAGE=registry-write.opensource.cosmic.rocks/acid/scdl8-test
             fi
             export IMAGE
             make deps mocks docker
@@ -46,9 +46,9 @@ pipeline:
             IS_PR_BUILD=${CDP_PULL_REQUEST_NUMBER+"true"}
             if [[ ${CDP_TARGET_BRANCH} == "master" && ${IS_PR_BUILD} != "true" ]]
             then
-              IMAGE=registry-write.opensource.zalan.do/acid/postgres-operator
+              IMAGE=registry-write.opensource.cosmic.rocks/acid/scdl8
             else
-              IMAGE=registry-write.opensource.zalan.do/acid/postgres-operator-test
+              IMAGE=registry-write.opensource.cosmic.rocks/acid/scdl8-test
             fi
             export IMAGE
             make push
@@ -73,9 +73,9 @@ pipeline:
             IS_PR_BUILD=${CDP_PULL_REQUEST_NUMBER+"true"}
             if [[ ${CDP_TARGET_BRANCH} == "master" && ${IS_PR_BUILD} != "true" ]]
             then
-              IMAGE=registry-write.opensource.zalan.do/acid/postgres-operator-ui
+              IMAGE=registry-write.opensource.cosmic.rocks/acid/scdl8-ui
             else
-              IMAGE=registry-write.opensource.zalan.do/acid/postgres-operator-ui-test
+              IMAGE=registry-write.opensource.cosmic.rocks/acid/scdl8-ui-test
             fi
             export IMAGE
             make docker
@@ -89,6 +89,6 @@ pipeline:
           cmd: |
             cd docker/logical-backup
             export TAG=$(git describe --tags --always --dirty)
-            IMAGE="registry-write.opensource.zalan.do/acid/logical-backup"
+            IMAGE="registry-write.opensource.cosmic.rocks/acid/logical-backup"
             docker build --rm -t "$IMAGE:$TAG$CDP_TAG" .
             docker push "$IMAGE:$TAG$CDP_TAG"

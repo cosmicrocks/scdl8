@@ -10,12 +10,12 @@ configuration.
   maps. String values containing ':' should be enclosed in quotes. The
   configuration is flat, parameter group names below are not reflected in the
   configuration structure. There is an
-  [example](https://github.com/zalando/postgres-operator/blob/master/manifests/configmap.yaml)
+  [example](https://github.com/cosmicrocks/scdl8/blob/master/manifests/configmap.yaml)
 
 * CRD-based configuration. The configuration is stored in a custom YAML
   manifest. The manifest is an instance of the custom resource definition (CRD)
   called `OperatorConfiguration`. The operator registers this CRD during the
-  start and uses it for configuration if the [operator deployment manifest](https://github.com/zalando/postgres-operator/blob/master/manifests/postgres-operator.yaml#L36)
+  start and uses it for configuration if the [operator deployment manifest](https://github.com/cosmicrocks/scdl8/blob/master/manifests/scdl8.yaml#L36)
   sets the `POSTGRES_OPERATOR_CONFIGURATION_OBJECT` env variable to a non-empty
   value. The variable should point to the `postgresql-operator-configuration`
   object in the operator's namespace.
@@ -24,7 +24,7 @@ configuration.
   simply represented in the usual YAML way. There are no default values built-in
   in the operator, each parameter that is not supplied in the configuration
   receives an empty value. In order to create your own configuration just copy
-  the [default one](https://github.com/zalando/postgres-operator/blob/master/manifests/postgresql-operator-default-configuration.yaml)
+  the [default one](https://github.com/cosmicrocks/scdl8/blob/master/manifests/postgresql-operator-default-configuration.yaml)
   and change it.
 
   To test the CRD-based configuration locally, use the following
@@ -34,7 +34,7 @@ configuration.
   kubectl create -f manifests/postgresql-operator-default-configuration.yaml
 
   kubectl create -f manifests/operator-service-account-rbac.yaml
-  kubectl create -f manifests/postgres-operator.yaml # set the env var as mentioned above
+  kubectl create -f manifests/scdl8.yaml # set the env var as mentioned above
 
   kubectl get operatorconfigurations postgresql-operator-default-configuration -o yaml
   ```
@@ -58,11 +58,11 @@ parameters, those parameters have no effect and are replaced by the
 `CRD_READY_WAIT_INTERVAL` and `CRD_READY_WAIT_TIMEOUT` environment variables.
 They will be deprecated and removed in the future.
 
-For the configmap configuration, the [default parameter values](https://github.com/zalando/postgres-operator/blob/master/pkg/util/config/config.go#L14)
+For the configmap configuration, the [default parameter values](https://github.com/cosmicrocks/scdl8/blob/master/pkg/util/config/config.go#L14)
 mentioned here are likely to be overwritten in your local operator installation
 via your local version of the operator configmap. In the case you use the
 operator CRD, all the CRD defaults are provided in the
-[operator's default configuration manifest](https://github.com/zalando/postgres-operator/blob/master/manifests/postgresql-operator-default-configuration.yaml)
+[operator's default configuration manifest](https://github.com/cosmicrocks/scdl8/blob/master/manifests/postgresql-operator-default-configuration.yaml)
 
 Variable names are underscore-separated words.
 
@@ -113,7 +113,7 @@ Those are top-level keys, containing both leaf keys and groups.
   Spilo Docker image for Postgres instances. For production, don't rely on the
   default image, as it might be not the most up-to-date one. Instead, build
   your own Spilo image from the [github
-  repository](https://github.com/zalando/spilo).
+  repository](https://github.com/cosmicrocks/spilo).
 
 * **sidecar_docker_images**
   *deprecated*: use **sidecars** instead. A map of sidecar names to Docker
@@ -174,7 +174,7 @@ Those are top-level keys, containing both leaf keys and groups.
   nodes. This affects all containers created by the operator (Postgres,
   connection pooler, logical backup, scalyr sidecar, and other sidecars except
   **sidecars** defined in the operator configuration); to set resources for the
-  operator's own container, change the [operator deployment manually](https://github.com/zalando/postgres-operator/blob/master/manifests/postgres-operator.yaml#L20).
+  operator's own container, change the [operator deployment manually](https://github.com/cosmicrocks/scdl8/blob/master/manifests/scdl8.yaml#L20).
   The default is `false`.
 
 ## Postgres users
@@ -277,7 +277,7 @@ configuration they are grouped under the `kubernetes` key.
   sufficient for the pods to start and for Patroni to access K8s endpoints;
   service account on its own lacks any such rights starting with K8s v1.8. If
   not explicitly defined by the user, a simple definition that binds the
-  account to the 'postgres-pod' [cluster role](https://github.com/zalando/postgres-operator/blob/master/manifests/operator-service-account-rbac.yaml#L198)
+  account to the 'postgres-pod' [cluster role](https://github.com/cosmicrocks/scdl8/blob/master/manifests/operator-service-account-rbac.yaml#L198)
   will be used. The default is empty.
 
 * **pod_terminate_grace_period**
@@ -431,7 +431,7 @@ configuration they are grouped under the `kubernetes` key.
   environment if they not if conflict with the environment variables generated
   by the operator. The WAL location (bucket path) can be overridden, though.
   The default is empty.
-  
+
 * **pod_environment_secret**
   similar to pod_environment_configmap but referencing a secret with custom
   environment variables. Because the secret is not allowed to exist in a
@@ -577,7 +577,7 @@ effect, and the parameters are grouped under the `timeouts` key in the
 CRD-based configuration.
 
 * **PatroniAPICheckInterval**
-  the interval between consecutive attempts waiting for the return of 
+  the interval between consecutive attempts waiting for the return of
   Patroni Api. The default is `1s`.
 
 * **PatroniAPICheckTimeout**
@@ -651,7 +651,7 @@ In the CRD-based configuration they are grouped under the `load_balancer` key.
   balancers. Allowed values are `Cluster` (default) and `Local`.
 
 * **master_dns_name_format**
-  defines the DNS name string template for the master load balancer cluster. 
+  defines the DNS name string template for the master load balancer cluster.
   The default is `{cluster}.{namespace}.{hostedzone}`, where `{cluster}` is
   replaced by the cluster name, `{namespace}` is replaced with the namespace
   and `{hostedzone}` is replaced with the hosted zone (the value of the
@@ -770,11 +770,11 @@ grouped under the `logical_backup` key.
   default values from `postgres_pod_resources` will be used.
 
 * **logical_backup_docker_image**
-  An image for pods of the logical backup job. The [example image](https://github.com/zalando/postgres-operator/blob/master/docker/logical-backup/Dockerfile)
+  An image for pods of the logical backup job. The [example image](https://github.com/cosmicrocks/scdl8/blob/master/docker/logical-backup/Dockerfile)
   runs `pg_dumpall` on a replica if possible and uploads compressed results to
   an S3 bucket under the key `/spilo/pg_cluster_name/cluster_k8s_uuid/logical_backups`.
-  The default image is the same image built with the Zalando-internal CI
-  pipeline. Default: "registry.opensource.zalan.do/acid/logical-backup:v1.10.0"
+  The default image is the same image built with the Cosmicrocks-internal CI
+  pipeline. Default: "registry.opensource.cosmic.rocks/acid/logical-backup:v1.10.0"
 
 * **logical_backup_google_application_credentials**
   Specifies the path of the google cloud service account json file. Default is empty.
@@ -816,7 +816,7 @@ grouped under the `logical_backup` key.
   is specified, no argument will be passed to `aws s3` command. Default: "AES256".
 
 * **logical_backup_s3_retention_time**
-  Specify a retention time for logical backups stored in S3. Backups older than the specified retention 
+  Specify a retention time for logical backups stored in S3. Backups older than the specified retention
   time will be deleted after a new backup was uploaded. If empty, all backups will be kept. Example values are
   "3 days", "2 weeks", or "1 month". The default is empty.
 
@@ -881,7 +881,7 @@ key.
 * **pam_role_name**
   when set, the operator will add all team member roles to this group and add a
   `pg_hba` line to authenticate members of that role via `pam`. The default is
-  `zalandos`.
+  `cosmics`.
 
 * **pam_configuration**
   when set, should contain a URL to use for authentication against the username
@@ -987,7 +987,7 @@ operator being able to provide some reasonable defaults.
 
 * **connection_pooler_image**
   Docker image to use for connection pooler deployment.
-  Default: "registry.opensource.zalan.do/acid/pgbouncer"
+  Default: "registry.opensource.cosmic.rocks/acid/pgbouncer"
 
 * **connection_pooler_max_db_connections**
   How many connections the pooler can max hold. This value is divided among the

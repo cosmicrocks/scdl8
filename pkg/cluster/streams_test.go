@@ -7,14 +7,14 @@ import (
 	"context"
 	"testing"
 
+	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	cosmicv1 "github.com/cosmicrocks/scdl8/pkg/apis/cosmic.rocks/v1"
+	fakecosmicv1 "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/fake"
+	"github.com/cosmicrocks/scdl8/pkg/util"
+	"github.com/cosmicrocks/scdl8/pkg/util/config"
+	"github.com/cosmicrocks/scdl8/pkg/util/constants"
+	"github.com/cosmicrocks/scdl8/pkg/util/k8sutil"
 	"github.com/stretchr/testify/assert"
-	acidv1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	zalandov1 "github.com/zalando/postgres-operator/pkg/apis/zalando.org/v1"
-	fakezalandov1 "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/fake"
-	"github.com/zalando/postgres-operator/pkg/util"
-	"github.com/zalando/postgres-operator/pkg/util/config"
-	"github.com/zalando/postgres-operator/pkg/util/constants"
-	"github.com/zalando/postgres-operator/pkg/util/k8sutil"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -22,12 +22,12 @@ import (
 )
 
 func newFakeK8sStreamClient() (k8sutil.KubernetesClient, *fake.Clientset) {
-	zalandoClientSet := fakezalandov1.NewSimpleClientset()
+	cosmicClientSet := fakecosmicv1.NewSimpleClientset()
 	clientSet := fake.NewSimpleClientset()
 
 	return k8sutil.KubernetesClient{
-		FabricEventStreamsGetter: zalandoClientSet.ZalandoV1(),
-		PostgresqlsGetter:        zalandoClientSet.AcidV1(),
+		FabricEventStreamsGetter: cosmicClientSet.CosmicRocksV1(),
+		PostgresqlsGetter:        cosmicClientSet.AcidV1(),
 		PodsGetter:               clientSet.CoreV1(),
 		StatefulSetsGetter:       clientSet.AppsV1(),
 	}, clientSet
@@ -44,7 +44,7 @@ var (
 	pg = acidv1.Postgresql{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Postgresql",
-			APIVersion: "acid.zalan.do/v1",
+			APIVersion: "acid.cosmic.rocks/v1",
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      clusterName,
@@ -81,7 +81,7 @@ var (
 		},
 	}
 
-	fes = &zalandov1.FabricEventStream{
+	fes = &cosmicv1.FabricEventStream{
 		TypeMeta: metav1.TypeMeta{
 			APIVersion: constants.EventStreamCRDApiVersion,
 			Kind:       constants.EventStreamCRDKind,
@@ -98,24 +98,24 @@ var (
 				},
 			},
 		},
-		Spec: zalandov1.FabricEventStreamSpec{
+		Spec: cosmicv1.FabricEventStreamSpec{
 			ApplicationId: appId,
-			EventStreams: []zalandov1.EventStream{
-				zalandov1.EventStream{
-					EventStreamFlow: zalandov1.EventStreamFlow{
+			EventStreams: []cosmicv1.EventStream{
+				cosmicv1.EventStream{
+					EventStreamFlow: cosmicv1.EventStreamFlow{
 						PayloadColumn: k8sutil.StringToPointer("b_payload"),
 						Type:          constants.EventStreamFlowPgGenericType,
 					},
-					EventStreamSink: zalandov1.EventStreamSink{
+					EventStreamSink: cosmicv1.EventStreamSink{
 						EventType:    "stream-type-a",
 						MaxBatchSize: k8sutil.UInt32ToPointer(uint32(100)),
 						Type:         constants.EventStreamSinkNakadiType,
 					},
-					EventStreamSource: zalandov1.EventStreamSource{
+					EventStreamSource: cosmicv1.EventStreamSource{
 						Filter: k8sutil.StringToPointer("[?(@.source.txId > 500 && @.source.lsn > 123456)]"),
-						Connection: zalandov1.Connection{
-							DBAuth: zalandov1.DBAuth{
-								Name:        fmt.Sprintf("fes-user.%s.credentials.postgresql.acid.zalan.do", clusterName),
+						Connection: cosmicv1.Connection{
+							DBAuth: cosmicv1.DBAuth{
+								Name:        fmt.Sprintf("fes-user.%s.credentials.postgresql.acid.cosmic.rocks", clusterName),
 								PasswordKey: "password",
 								Type:        constants.EventStreamSourceAuthType,
 								UserKey:     "username",
@@ -125,26 +125,26 @@ var (
 							PluginType: constants.EventStreamSourcePluginType,
 						},
 						Schema: "data",
-						EventStreamTable: zalandov1.EventStreamTable{
+						EventStreamTable: cosmicv1.EventStreamTable{
 							IDColumn: k8sutil.StringToPointer("b_id"),
 							Name:     "bar",
 						},
 						Type: constants.EventStreamSourcePGType,
 					},
 				},
-				zalandov1.EventStream{
-					EventStreamFlow: zalandov1.EventStreamFlow{
+				cosmicv1.EventStream{
+					EventStreamFlow: cosmicv1.EventStreamFlow{
 						Type: constants.EventStreamFlowPgGenericType,
 					},
-					EventStreamSink: zalandov1.EventStreamSink{
+					EventStreamSink: cosmicv1.EventStreamSink{
 						EventType:    "stream-type-b",
 						MaxBatchSize: k8sutil.UInt32ToPointer(uint32(100)),
 						Type:         constants.EventStreamSinkNakadiType,
 					},
-					EventStreamSource: zalandov1.EventStreamSource{
-						Connection: zalandov1.Connection{
-							DBAuth: zalandov1.DBAuth{
-								Name:        fmt.Sprintf("fes-user.%s.credentials.postgresql.acid.zalan.do", clusterName),
+					EventStreamSource: cosmicv1.EventStreamSource{
+						Connection: cosmicv1.Connection{
+							DBAuth: cosmicv1.DBAuth{
+								Name:        fmt.Sprintf("fes-user.%s.credentials.postgresql.acid.cosmic.rocks", clusterName),
 								PasswordKey: "password",
 								Type:        constants.EventStreamSourceAuthType,
 								UserKey:     "username",
@@ -154,7 +154,7 @@ var (
 							PluginType: constants.EventStreamSourcePluginType,
 						},
 						Schema: "data",
-						EventStreamTable: zalandov1.EventStreamTable{
+						EventStreamTable: cosmicv1.EventStreamTable{
 							Name: "foobar",
 						},
 						Type: constants.EventStreamSourcePGType,
@@ -250,25 +250,25 @@ func TestGenerateFabricEventStream(t *testing.T) {
 func TestSameStreams(t *testing.T) {
 	testName := "TestSameStreams"
 
-	stream1 := zalandov1.EventStream{
-		EventStreamFlow: zalandov1.EventStreamFlow{},
-		EventStreamSink: zalandov1.EventStreamSink{
+	stream1 := cosmicv1.EventStream{
+		EventStreamFlow: cosmicv1.EventStreamFlow{},
+		EventStreamSink: cosmicv1.EventStreamSink{
 			EventType: "stream-type-a",
 		},
-		EventStreamSource: zalandov1.EventStreamSource{
-			EventStreamTable: zalandov1.EventStreamTable{
+		EventStreamSource: cosmicv1.EventStreamSource{
+			EventStreamTable: cosmicv1.EventStreamTable{
 				Name: "foo",
 			},
 		},
 	}
 
-	stream2 := zalandov1.EventStream{
-		EventStreamFlow: zalandov1.EventStreamFlow{},
-		EventStreamSink: zalandov1.EventStreamSink{
+	stream2 := cosmicv1.EventStream{
+		EventStreamFlow: cosmicv1.EventStreamFlow{},
+		EventStreamSink: cosmicv1.EventStreamSink{
 			EventType: "stream-type-b",
 		},
-		EventStreamSource: zalandov1.EventStreamSource{
-			EventStreamTable: zalandov1.EventStreamTable{
+		EventStreamSource: cosmicv1.EventStreamSource{
+			EventStreamTable: cosmicv1.EventStreamTable{
 				Name: "bar",
 			},
 		},
@@ -276,42 +276,42 @@ func TestSameStreams(t *testing.T) {
 
 	tests := []struct {
 		subTest  string
-		streamsA []zalandov1.EventStream
-		streamsB []zalandov1.EventStream
+		streamsA []cosmicv1.EventStream
+		streamsB []cosmicv1.EventStream
 		match    bool
 		reason   string
 	}{
 		{
 			subTest:  "identical streams",
-			streamsA: []zalandov1.EventStream{stream1, stream2},
-			streamsB: []zalandov1.EventStream{stream1, stream2},
+			streamsA: []cosmicv1.EventStream{stream1, stream2},
+			streamsB: []cosmicv1.EventStream{stream1, stream2},
 			match:    true,
 			reason:   "",
 		},
 		{
 			subTest:  "same streams different order",
-			streamsA: []zalandov1.EventStream{stream1, stream2},
-			streamsB: []zalandov1.EventStream{stream2, stream1},
+			streamsA: []cosmicv1.EventStream{stream1, stream2},
+			streamsB: []cosmicv1.EventStream{stream2, stream1},
 			match:    true,
 			reason:   "",
 		},
 		{
 			subTest:  "same streams different order",
-			streamsA: []zalandov1.EventStream{stream1},
-			streamsB: []zalandov1.EventStream{stream1, stream2},
+			streamsA: []cosmicv1.EventStream{stream1},
+			streamsB: []cosmicv1.EventStream{stream1, stream2},
 			match:    false,
 			reason:   "number of defined streams is different",
 		},
 		{
 			subTest:  "different number of streams",
-			streamsA: []zalandov1.EventStream{stream1},
-			streamsB: []zalandov1.EventStream{stream1, stream2},
+			streamsA: []cosmicv1.EventStream{stream1},
+			streamsB: []cosmicv1.EventStream{stream1, stream2},
 			match:    false,
 			reason:   "number of defined streams is different",
 		},
 		{
 			subTest:  "event stream specs differ",
-			streamsA: []zalandov1.EventStream{stream1, stream2},
+			streamsA: []cosmicv1.EventStream{stream1, stream2},
 			streamsB: fes.Spec.EventStreams,
 			match:    false,
 			reason:   "number of defined streams is different",

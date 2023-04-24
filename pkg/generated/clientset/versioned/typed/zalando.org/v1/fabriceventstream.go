@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,8 +28,8 @@ import (
 	"context"
 	"time"
 
-	v1 "github.com/zalando/postgres-operator/pkg/apis/zalando.org/v1"
-	scheme "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/scheme"
+	v1 "github.com/cosmicrocks/scdl8/pkg/apis/cosmic.rocks/v1"
+	scheme "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/scheme"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -62,7 +62,7 @@ type fabricEventStreams struct {
 }
 
 // newFabricEventStreams returns a FabricEventStreams
-func newFabricEventStreams(c *ZalandoV1Client, namespace string) *fabricEventStreams {
+func newFabricEventStreams(c *CosmicRocksV1Client, namespace string) *fabricEventStreams {
 	return &fabricEventStreams{
 		client: c.RESTClient(),
 		ns:     namespace,

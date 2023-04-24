@@ -4,9 +4,9 @@ Individual Postgres clusters are described by the Kubernetes *cluster manifest*
 that has the structure defined by the `postgresql` CRD (custom resource
 definition). The following section describes the structure of the manifest and
 the purpose of individual keys. You can take a look at the examples of the
-[minimal](https://github.com/zalando/postgres-operator/blob/master/manifests/minimal-postgres-manifest.yaml)
+[minimal](https://github.com/cosmicrocks/scdl8/blob/master/manifests/minimal-postgres-manifest.yaml)
 and the
-[complete](https://github.com/zalando/postgres-operator/blob/master/manifests/complete-postgres-manifest.yaml)
+[complete](https://github.com/cosmicrocks/scdl8/blob/master/manifests/complete-postgres-manifest.yaml)
 cluster manifests.
 
 When Kubernetes resources, such as memory, CPU or volumes, are configured,
@@ -62,7 +62,7 @@ These parameters are grouped directly under  the `spec` key in the manifest.
 
 * **dockerImage**
   custom Docker image that overrides the **docker_image** operator parameter.
-  It should be a [Spilo](https://github.com/zalando/spilo) image. Optional.
+  It should be a [Spilo](https://github.com/cosmicrocks/spilo) image. Optional.
 
 * **schedulerName**
   specifies the scheduling profile for database pods. If no value is provided
@@ -132,7 +132,7 @@ These parameters are grouped directly under  the `spec` key in the manifest.
   be added in the database replacing the `username` value in the secret of
   the listed user. Although, rotation users inherit all rights from the
   original role, keep in mind that ownership is not transferred. See more
-  details in the [administrator docs](https://github.com/zalando/postgres-operator/blob/master/docs/administrator.md#password-rotation-in-k8s-secrets).
+  details in the [administrator docs](https://github.com/cosmicrocks/scdl8/blob/master/docs/administrator.md#password-rotation-in-k8s-secrets).
 
 * **usersWithInPlaceSecretRotation**
   list of users to enable in-place password rotation in K8s secrets. The
@@ -140,7 +140,7 @@ These parameters are grouped directly under  the `spec` key in the manifest.
   password value will be replaced in the secrets which the operator reflects
   in the database, too. List only users here that rarely connect to the
   database, like a flyway user running a migration on Pod start. See more
-  details in the [administrator docs](https://github.com/zalando/postgres-operator/blob/master/docs/administrator.md#password-replacement-without-extra-users).
+  details in the [administrator docs](https://github.com/cosmicrocks/scdl8/blob/master/docs/administrator.md#password-replacement-without-extra-users).
 
 * **databases**
   a map of database names to database owners for the databases that should be
@@ -170,13 +170,13 @@ These parameters are grouped directly under  the `spec` key in the manifest.
 * **serviceAnnotations**
   A map of key value pairs that gets attached as [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   to the services created for the database cluster. Check the
-  [administrator docs](https://github.com/zalando/postgres-operator/blob/master/docs/administrator.md#load-balancers-and-allowed-ip-ranges)
+  [administrator docs](https://github.com/cosmicrocks/scdl8/blob/master/docs/administrator.md#load-balancers-and-allowed-ip-ranges)
   for more information regarding default values and overwrite rules.
 
 * **masterServiceAnnotations**
   A map of key value pairs that gets attached as [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   to the master service created for the database cluster. Check the
-  [administrator docs](https://github.com/zalando/postgres-operator/blob/master/docs/administrator.md#load-balancers-and-allowed-ip-ranges)
+  [administrator docs](https://github.com/cosmicrocks/scdl8/blob/master/docs/administrator.md#load-balancers-and-allowed-ip-ranges)
   for more information regarding default values and overwrite rules.
   This field overrides `serviceAnnotations` with the same key for the master
   service if not empty.
@@ -184,7 +184,7 @@ These parameters are grouped directly under  the `spec` key in the manifest.
 * **replicaServiceAnnotations**
   A map of key value pairs that gets attached as [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
   to the replica service created for the database cluster. Check the
-  [administrator docs](https://github.com/zalando/postgres-operator/blob/master/docs/administrator.md#load-balancers-and-allowed-ip-ranges)
+  [administrator docs](https://github.com/cosmicrocks/scdl8/blob/master/docs/administrator.md#load-balancers-and-allowed-ip-ranges)
   for more information regarding default values and overwrite rules.
   This field overrides `serviceAnnotations` with the same key for the replica
   service if not empty.
@@ -268,7 +268,7 @@ required in the manifest.
 
 * **version**
   the Postgres major version of the cluster. Looks at the [Spilo
-  project](https://github.com/zalando/spilo/releases) for the list of supported
+  project](https://github.com/cosmicrocks/spilo/releases) for the list of supported
   versions. Changing the cluster version once the cluster has been bootstrapped
   is not supported. Required field.
 
@@ -339,13 +339,13 @@ explanation of `ttl` and `loop_wait` parameters.
   [here](https://patroni.readthedocs.io/en/master/dcs_failsafe_mode.html) for more details.
   This feature is included since Patroni 3.0.0. Hence, check the container
   image in use if this feature is included in the used Patroni version. The
-  default is set to `false`. Optional. 
-  
+  default is set to `false`. Optional.
+
 ## Postgres container resources
 
 Those parameters define [CPU and memory requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/)
 for the Postgres container. They are grouped under the `resources` top-level
-key with subgroups `requests` and `limits`. 
+key with subgroups `requests` and `limits`.
 
 ### Requests
 
@@ -462,7 +462,7 @@ properties of the persistent storage that stores Postgres data.
   allows for configuring the throughput in MB/s. Maximum is 1000. Optional.
 
 * **selector**
-  A label query over PVs to consider for binding. See the [Kubernetes 
+  A label query over PVs to consider for binding. See the [Kubernetes
   documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
   for details on using `matchLabels` and `matchExpressions`. Optional
 
@@ -580,16 +580,16 @@ the global configuration before adding the `tls` section'.
 
 ## Change data capture streams
 
-This sections enables change data capture (CDC) streams via Postgres' 
+This sections enables change data capture (CDC) streams via Postgres'
 [logical decoding](https://www.postgresql.org/docs/15/logicaldecoding.html)
 feature and `pgoutput` plugin. While the Postgres operator takes responsibility
 for providing the setup to publish change events, it relies on external tools
-to consume them. At Zalando, we are using a workflow based on
+to consume them. At Cosmicrocks, we are using a workflow based on
 [Debezium Connector](https://debezium.io/documentation/reference/stable/connectors/postgresql.html)
-which can feed streams into Zalando’s distributed event broker [Nakadi](https://nakadi.io/)
+which can feed streams into Cosmicrocks’s distributed event broker [Nakadi](https://nakadi.io/)
 among others.
 
-The Postgres Operator creates custom resources for Zalando's internal CDC
+The Postgres Operator creates custom resources for Cosmicrocks's internal CDC
 operator which will be used to set up the consumer part. Each stream object
 can have the following properties:
 

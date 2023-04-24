@@ -14,7 +14,7 @@ var (
 	logger = logrus.New().WithField("pkg", "teamsapi")
 	token  = "ec45b1cfbe7100c6315d183a3eb6cec0M2U1LWJkMzEtZDgzNzNmZGQyNGM3IiwiYXV0aF90aW1lIjoxNDkzNzMwNzQ1LCJpc3MiOiJodHRwcz"
 	input  = `{
-	"dn": "cn=100100,ou=official,ou=foobar,dc=zalando,dc=net",
+	"dn": "cn=100100,ou=official,ou=foobar,dc=cosmicrocks,dc=net",
 	"id": "acid",
 	"id_name": "acid",
 	"team_id": "111222",
@@ -40,7 +40,7 @@ var (
 	  "type": "aws",
 	  "description": "",
 	  "owner": "acid",
-	  "owner_dn": "cn=100100,ou=official,ou=foobar,dc=zalando,dc=net",
+	  "owner_dn": "cn=100100,ou=official,ou=foobar,dc=cosmicrocks,dc=net",
 	  "disabled": false
 	},
 	{
@@ -50,7 +50,7 @@ var (
 	  "type": "aws",
 	  "description": "",
 	  "owner": "acid",
-	  "owner_dn": "cn=100100,ou=official,ou=foobar,dc=zalando,dc=net",
+	  "owner_dn": "cn=100100,ou=official,ou=foobar,dc=cosmicrocks,dc=net",
 	  "disabled": false
 	}
 	],
@@ -71,7 +71,7 @@ var teamsAPItc = []struct {
 		200,
 		"acid",
 		&Team{
-			Dn:           "cn=100100,ou=official,ou=foobar,dc=zalando,dc=net",
+			Dn:           "cn=100100,ou=official,ou=foobar,dc=cosmicrocks,dc=net",
 			ID:           "acid",
 			TeamName:     "acid",
 			TeamID:       "111222",
@@ -91,7 +91,7 @@ var teamsAPItc = []struct {
 					Type:        "aws",
 					Description: "",
 					Owner:       "acid",
-					OwnerDn:     "cn=100100,ou=official,ou=foobar,dc=zalando,dc=net",
+					OwnerDn:     "cn=100100,ou=official,ou=foobar,dc=cosmicrocks,dc=net",
 					Disabled:    false},
 				{
 					ID:          "5432154321",
@@ -100,7 +100,7 @@ var teamsAPItc = []struct {
 					Type:        "aws",
 					Description: "",
 					Owner:       "acid",
-					OwnerDn:     "cn=100100,ou=official,ou=foobar,dc=zalando,dc=net",
+					OwnerDn:     "cn=100100,ou=official,ou=foobar,dc=cosmicrocks,dc=net",
 					Disabled:    false},
 			},
 		},

@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,29 +27,29 @@ package v1
 import (
 	"net/http"
 
-	v1 "github.com/zalando/postgres-operator/pkg/apis/zalando.org/v1"
-	"github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/scheme"
+	v1 "github.com/cosmicrocks/scdl8/pkg/apis/cosmic.rocks/v1"
+	"github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 
-type ZalandoV1Interface interface {
+type CosmicRocksV1Interface interface {
 	RESTClient() rest.Interface
 	FabricEventStreamsGetter
 }
 
-// ZalandoV1Client is used to interact with features provided by the zalando.org group.
-type ZalandoV1Client struct {
+// CosmicRocksV1Client is used to interact with features provided by the cosmic.rocks group.
+type CosmicRocksV1Client struct {
 	restClient rest.Interface
 }
 
-func (c *ZalandoV1Client) FabricEventStreams(namespace string) FabricEventStreamInterface {
+func (c *CosmicRocksV1Client) FabricEventStreams(namespace string) FabricEventStreamInterface {
 	return newFabricEventStreams(c, namespace)
 }
 
-// NewForConfig creates a new ZalandoV1Client for the given config.
+// NewForConfig creates a new CosmicRocksV1Client for the given config.
 // NewForConfig is equivalent to NewForConfigAndClient(c, httpClient),
 // where httpClient was generated with rest.HTTPClientFor(c).
-func NewForConfig(c *rest.Config) (*ZalandoV1Client, error) {
+func NewForConfig(c *rest.Config) (*CosmicRocksV1Client, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -61,9 +61,9 @@ func NewForConfig(c *rest.Config) (*ZalandoV1Client, error) {
 	return NewForConfigAndClient(&config, httpClient)
 }
 
-// NewForConfigAndClient creates a new ZalandoV1Client for the given config and http client.
+// NewForConfigAndClient creates a new CosmicRocksV1Client for the given config and http client.
 // Note the http client provided takes precedence over the configured transport values.
-func NewForConfigAndClient(c *rest.Config, h *http.Client) (*ZalandoV1Client, error) {
+func NewForConfigAndClient(c *rest.Config, h *http.Client) (*CosmicRocksV1Client, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -72,12 +72,12 @@ func NewForConfigAndClient(c *rest.Config, h *http.Client) (*ZalandoV1Client, er
 	if err != nil {
 		return nil, err
 	}
-	return &ZalandoV1Client{client}, nil
+	return &CosmicRocksV1Client{client}, nil
 }
 
-// NewForConfigOrDie creates a new ZalandoV1Client for the given config and
+// NewForConfigOrDie creates a new CosmicRocksV1Client for the given config and
 // panics if there is an error in the config.
-func NewForConfigOrDie(c *rest.Config) *ZalandoV1Client {
+func NewForConfigOrDie(c *rest.Config) *CosmicRocksV1Client {
 	client, err := NewForConfig(c)
 	if err != nil {
 		panic(err)
@@ -85,9 +85,9 @@ func NewForConfigOrDie(c *rest.Config) *ZalandoV1Client {
 	return client
 }
 
-// New creates a new ZalandoV1Client for the given RESTClient.
-func New(c rest.Interface) *ZalandoV1Client {
-	return &ZalandoV1Client{c}
+// New creates a new CosmicRocksV1Client for the given RESTClient.
+func New(c rest.Interface) *CosmicRocksV1Client {
+	return &CosmicRocksV1Client{c}
 }
 
 func setConfigDefaults(config *rest.Config) error {
@@ -105,7 +105,7 @@ func setConfigDefaults(config *rest.Config) error {
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *ZalandoV1Client) RESTClient() rest.Interface {
+func (c *CosmicRocksV1Client) RESTClient() rest.Interface {
 	if c == nil {
 		return nil
 	}

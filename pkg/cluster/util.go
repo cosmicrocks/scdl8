@@ -18,15 +18,15 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 
+	acidcosmic "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks"
+	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
+	"github.com/cosmicrocks/scdl8/pkg/util"
+	"github.com/cosmicrocks/scdl8/pkg/util/constants"
+	"github.com/cosmicrocks/scdl8/pkg/util/k8sutil"
+	"github.com/cosmicrocks/scdl8/pkg/util/nicediff"
+	"github.com/cosmicrocks/scdl8/pkg/util/retryutil"
 	"github.com/sirupsen/logrus"
-	acidzalando "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do"
-	acidv1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	"github.com/zalando/postgres-operator/pkg/spec"
-	"github.com/zalando/postgres-operator/pkg/util"
-	"github.com/zalando/postgres-operator/pkg/util/constants"
-	"github.com/zalando/postgres-operator/pkg/util/k8sutil"
-	"github.com/zalando/postgres-operator/pkg/util/nicediff"
-	"github.com/zalando/postgres-operator/pkg/util/retryutil"
 )
 
 // OAuthTokenGetter provides the method for fetching OAuth tokens
@@ -570,7 +570,7 @@ func (c *Cluster) credentialSecretNameForCluster(username string, clusterName st
 		"username", strings.Replace(username, "_", "-", -1),
 		"cluster", clusterName,
 		"tprkind", acidv1.PostgresCRDResourceKind,
-		"tprgroup", acidzalando.GroupName)
+		"tprgroup", acidcosmic.GroupName)
 }
 
 func cloneSpec(from *acidv1.Postgresql) (*acidv1.Postgresql, error) {

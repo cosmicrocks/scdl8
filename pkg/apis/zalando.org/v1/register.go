@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"github.com/zalando/postgres-operator/pkg/apis/zalando.org"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -26,7 +25,7 @@ func init() {
 }
 
 // SchemeGroupVersion is the group version used to register these objects.
-var SchemeGroupVersion = schema.GroupVersion{Group: zalando.GroupName, Version: APIVersion}
+var SchemeGroupVersion = schema.GroupVersion{Group: cosmicrocks.GroupName, Version: APIVersion}
 
 // Resource takes an unqualified resource and returns a Group-qualified GroupResource.
 func Resource(resource string) schema.GroupResource {

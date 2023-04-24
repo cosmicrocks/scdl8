@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
+	acidcosmic "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks"
+	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
 	"github.com/r3labs/diff"
 	"github.com/sirupsen/logrus"
-	acidzalando "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do"
-	acidv1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -17,11 +17,11 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
-	"github.com/zalando/postgres-operator/pkg/util"
-	"github.com/zalando/postgres-operator/pkg/util/config"
-	"github.com/zalando/postgres-operator/pkg/util/constants"
-	"github.com/zalando/postgres-operator/pkg/util/k8sutil"
-	"github.com/zalando/postgres-operator/pkg/util/retryutil"
+	"github.com/cosmicrocks/scdl8/pkg/util"
+	"github.com/cosmicrocks/scdl8/pkg/util/config"
+	"github.com/cosmicrocks/scdl8/pkg/util/constants"
+	"github.com/cosmicrocks/scdl8/pkg/util/k8sutil"
+	"github.com/cosmicrocks/scdl8/pkg/util/retryutil"
 )
 
 var poolerRunAsUser = int64(100)
@@ -541,7 +541,7 @@ func (c *Cluster) generatePoolerServiceAnnotations(role PostgresRole, spec *acid
 		} else {
 			dnsString = c.replicaDNSName(clusterNameWithPoolerSuffix)
 		}
-		annotations[constants.ZalandoDNSNameAnnotation] = dnsString
+		annotations[constants.CosmicRocksDNSNameAnnotation] = dnsString
 	}
 
 	if len(annotations) == 0 {
@@ -794,7 +794,7 @@ func (c *Cluster) needSyncConnectionPoolerDefaults(Config *Config, spec *acidv1.
 				"username", strings.Replace(config.User, "_", "-", -1),
 				"cluster", c.Name,
 				"tprkind", acidv1.PostgresCRDResourceKind,
-				"tprgroup", acidzalando.GroupName)
+				"tprgroup", acidcosmic.GroupName)
 
 			if ref.Name != secretName {
 				sync = true

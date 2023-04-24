@@ -29,8 +29,8 @@ import (
 	"log"
 	"strconv"
 
+	PostgresqlLister "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/typed/acid.cosmic.rocks/v1"
 	"github.com/spf13/cobra"
-	PostgresqlLister "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/typed/acid.zalan.do/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -51,7 +51,7 @@ var extVolumeCmd = &cobra.Command{
 		}
 	},
 	Example: `
-#Extending the volume size of provided cluster 
+#Extending the volume size of provided cluster
 kubectl pg ext-volume 2Gi -c cluster01
 `,
 }

@@ -10,11 +10,11 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/cosmicrocks/scdl8/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/sirupsen/logrus"
-	"github.com/zalando/postgres-operator/mocks"
 
-	acidv1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
+	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
 	v1 "k8s.io/api/core/v1"
 )
 

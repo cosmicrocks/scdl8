@@ -25,7 +25,7 @@ folder and run:
 make
 ```
 
-This will build the `postgres-operator-e2e-tests` image and download the kind
+This will build the `scdl8-e2e-tests` image and download the kind
 runtime.
 
 ## Run tests
@@ -62,10 +62,10 @@ If you want to inspect Kind/Kubernetes cluster, switch `kubeconfig` file and con
 export KUBECONFIG_SAVED=$KUBECONFIG
 
 # use the one created by e2e tests
-export KUBECONFIG=/tmp/kind-config-postgres-operator-e2e-tests
+export KUBECONFIG=/tmp/kind-config-scdl8-e2e-tests
 
 # this kubeconfig defines a single context
-kubectl config use-context kind-postgres-operator-e2e-tests
+kubectl config use-context kind-scdl8-e2e-tests
 ```
 
 or use the following script to exec into the K8s setup and then use `kubectl`
@@ -101,7 +101,7 @@ e2e/run.sh cleanup
 
 That also helps in case you see the
 ```
-ERROR: no nodes found for cluster "postgres-operator-e2e-tests"
+ERROR: no nodes found for cluster "scdl8-e2e-tests"
 ```
 that happens when the `kind` cluster was deleted manually but its configuraiton file was not.
 

@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "postgres-operator.fullname" . }}
+  name: {{ template "scdl8.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
-    helm.sh/chart: {{ template "postgres-operator.chart" . }}
+    app.kubernetes.io/name: {{ template "scdl8.name" . }}
+    helm.sh/chart: {{ template "scdl8.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 data:

@@ -1,4 +1,4 @@
-module github.com/zalando/postgres-operator
+module github.com/cosmicrocks/scdl8
 
 go 1.19
 

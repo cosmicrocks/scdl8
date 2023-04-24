@@ -29,9 +29,9 @@ import (
 	"strconv"
 	"time"
 
+	v1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	PostgresqlLister "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/typed/acid.cosmic.rocks/v1"
 	"github.com/spf13/cobra"
-	v1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	PostgresqlLister "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/typed/acid.zalan.do/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

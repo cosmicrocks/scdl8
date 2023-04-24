@@ -13,13 +13,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 
-	"github.com/zalando/postgres-operator/pkg/util"
-	"github.com/zalando/postgres-operator/pkg/util/k8sutil"
-	"github.com/zalando/postgres-operator/pkg/util/retryutil"
+	"github.com/cosmicrocks/scdl8/pkg/util"
+	"github.com/cosmicrocks/scdl8/pkg/util/k8sutil"
+	"github.com/cosmicrocks/scdl8/pkg/util/retryutil"
 )
 
 const (
-	rollingUpdatePodAnnotationKey = "zalando-postgres-operator-rolling-update-required"
+	rollingUpdatePodAnnotationKey = "cosmicrocks-scdl8-rolling-update-required"
 )
 
 func (c *Cluster) listResources() error {

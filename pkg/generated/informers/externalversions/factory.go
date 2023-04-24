@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,10 +29,10 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned"
-	acidzalando "github.com/zalando/postgres-operator/pkg/generated/informers/externalversions/acid.zalan.do"
-	internalinterfaces "github.com/zalando/postgres-operator/pkg/generated/informers/externalversions/internalinterfaces"
-	zalandoorg "github.com/zalando/postgres-operator/pkg/generated/informers/externalversions/zalando.org"
+	versioned "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned"
+	acidcosmic "github.com/cosmicrocks/scdl8/pkg/generated/informers/externalversions/acid.cosmic.rocks"
+	internalinterfaces "github.com/cosmicrocks/scdl8/pkg/generated/informers/externalversions/internalinterfaces"
+	cosmicorg "github.com/cosmicrocks/scdl8/pkg/generated/informers/externalversions/cosmic.rocks"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -179,14 +179,14 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Acid() acidzalando.Interface
-	Zalando() zalandoorg.Interface
+	Acid() acidcosmic.Interface
+	Cosmicrocks() cosmicorg.Interface
 }
 
-func (f *sharedInformerFactory) Acid() acidzalando.Interface {
-	return acidzalando.New(f, f.namespace, f.tweakListOptions)
+func (f *sharedInformerFactory) Acid() acidcosmic.Interface {
+	return acidcosmic.New(f, f.namespace, f.tweakListOptions)
 }
 
-func (f *sharedInformerFactory) Zalando() zalandoorg.Interface {
-	return zalandoorg.New(f, f.namespace, f.tweakListOptions)
+func (f *sharedInformerFactory) Cosmicrocks() cosmicorg.Interface {
+	return cosmicorg.New(f, f.namespace, f.tweakListOptions)
 }

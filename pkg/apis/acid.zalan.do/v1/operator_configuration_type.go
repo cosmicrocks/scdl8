@@ -3,11 +3,11 @@ package v1
 // Operator configuration CRD definition, please use snake_case for field names.
 
 import (
-	"github.com/zalando/postgres-operator/pkg/util/config"
+	"github.com/cosmicrocks/scdl8/pkg/util/config"
 
 	"time"
 
-	"github.com/zalando/postgres-operator/pkg/spec"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )

@@ -3,8 +3,8 @@ package v1
 import (
 	"fmt"
 
-	acidzalando "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do"
-	"github.com/zalando/postgres-operator/pkg/util"
+	acidcosmic "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks"
+	"github.com/cosmicrocks/scdl8/pkg/util"
 	apiextv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -14,13 +14,13 @@ const (
 	PostgresCRDResourceKind   = "postgresql"
 	PostgresCRDResourcePlural = "postgresqls"
 	PostgresCRDResourceList   = PostgresCRDResourceKind + "List"
-	PostgresCRDResouceName    = PostgresCRDResourcePlural + "." + acidzalando.GroupName
+	PostgresCRDResouceName    = PostgresCRDResourcePlural + "." + acidcosmic.GroupName
 	PostgresCRDResourceShort  = "pg"
 
 	OperatorConfigCRDResouceKind    = "OperatorConfiguration"
 	OperatorConfigCRDResourcePlural = "operatorconfigurations"
 	OperatorConfigCRDResourceList   = OperatorConfigCRDResouceKind + "List"
-	OperatorConfigCRDResourceName   = OperatorConfigCRDResourcePlural + "." + acidzalando.GroupName
+	OperatorConfigCRDResourceName   = OperatorConfigCRDResourcePlural + "." + acidcosmic.GroupName
 	OperatorConfigCRDResourceShort  = "opconfig"
 )
 
@@ -130,7 +130,7 @@ var PostgresCRDResourceValidation = apiextv1.CustomResourceValidation{
 				Type: "string",
 				Enum: []apiextv1.JSON{
 					{
-						Raw: []byte(`"acid.zalan.do/v1"`),
+						Raw: []byte(`"acid.cosmic.rocks/v1"`),
 					},
 				},
 			},
@@ -1093,7 +1093,7 @@ var OperatorConfigCRDResourceValidation = apiextv1.CustomResourceValidation{
 				Type: "string",
 				Enum: []apiextv1.JSON{
 					{
-						Raw: []byte(`"acid.zalan.do/v1"`),
+						Raw: []byte(`"acid.cosmic.rocks/v1"`),
 					},
 				},
 			},

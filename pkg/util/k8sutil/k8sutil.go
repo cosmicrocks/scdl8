@@ -11,11 +11,11 @@ import (
 	batchv1 "k8s.io/api/batch/v1"
 	clientbatchv1 "k8s.io/client-go/kubernetes/typed/batch/v1"
 
-	apiacidv1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	zalandoclient "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned"
-	acidv1 "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/typed/acid.zalan.do/v1"
-	zalandov1 "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/typed/zalando.org/v1"
-	"github.com/zalando/postgres-operator/pkg/spec"
+	apiacidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	cosmicclient "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned"
+	acidv1 "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/typed/acid.cosmic.rocks/v1"
+	cosmicv1 "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/typed/cosmic.rocks/v1"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
 	apiappsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	apipolicyv1 "k8s.io/api/policy/v1"
@@ -67,11 +67,11 @@ type KubernetesClient struct {
 	acidv1.OperatorConfigurationsGetter
 	acidv1.PostgresTeamsGetter
 	acidv1.PostgresqlsGetter
-	zalandov1.FabricEventStreamsGetter
+	cosmicv1.FabricEventStreamsGetter
 
-	RESTClient         rest.Interface
-	AcidV1ClientSet    *zalandoclient.Clientset
-	Zalandov1ClientSet *zalandoclient.Clientset
+	RESTClient             rest.Interface
+	AcidV1ClientSet        *cosmicclient.Clientset
+	CosmicRocksv1ClientSet *cosmicclient.Clientset
 }
 
 type mockSecret struct {
@@ -169,19 +169,19 @@ func NewFromConfig(cfg *rest.Config) (KubernetesClient, error) {
 
 	kubeClient.CustomResourceDefinitionsGetter = apiextClient.ApiextensionsV1()
 
-	kubeClient.AcidV1ClientSet = zalandoclient.NewForConfigOrDie(cfg)
+	kubeClient.AcidV1ClientSet = cosmicclient.NewForConfigOrDie(cfg)
 	if err != nil {
-		return kubeClient, fmt.Errorf("could not create acid.zalan.do clientset: %v", err)
+		return kubeClient, fmt.Errorf("could not create acid.cosmic.rocks clientset: %v", err)
 	}
-	kubeClient.Zalandov1ClientSet = zalandoclient.NewForConfigOrDie(cfg)
+	kubeClient.CosmicRocksv1ClientSet = cosmicclient.NewForConfigOrDie(cfg)
 	if err != nil {
-		return kubeClient, fmt.Errorf("could not create zalando.org clientset: %v", err)
+		return kubeClient, fmt.Errorf("could not create cosmic.rocks clientset: %v", err)
 	}
 
 	kubeClient.OperatorConfigurationsGetter = kubeClient.AcidV1ClientSet.AcidV1()
 	kubeClient.PostgresTeamsGetter = kubeClient.AcidV1ClientSet.AcidV1()
 	kubeClient.PostgresqlsGetter = kubeClient.AcidV1ClientSet.AcidV1()
-	kubeClient.FabricEventStreamsGetter = kubeClient.Zalandov1ClientSet.ZalandoV1()
+	kubeClient.FabricEventStreamsGetter = kubeClient.CosmicRocksv1ClientSet.CosmicRocksV1()
 
 	return kubeClient, nil
 }

@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,8 @@ package v1
 import (
 	"net/http"
 
-	v1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
-	"github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/scheme"
+	v1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
+	"github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 
@@ -39,7 +39,7 @@ type AcidV1Interface interface {
 	PostgresqlsGetter
 }
 
-// AcidV1Client is used to interact with features provided by the acid.zalan.do group.
+// AcidV1Client is used to interact with features provided by the acid.cosmic.rocks group.
 type AcidV1Client struct {
 	restClient rest.Interface
 }

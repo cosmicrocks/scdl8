@@ -2,15 +2,15 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "postgres-operator-ui.serviceAccountName" . }}
+  name: {{ include "scdl8-ui.serviceAccountName" . }}
   labels:
-    app.kubernetes.io/name: {{ template "postgres-operator-ui.name" . }}
-    helm.sh/chart: {{ template "postgres-operator-ui.chart" . }}
+    app.kubernetes.io/name: {{ template "scdl8-ui.name" . }}
+    helm.sh/chart: {{ template "scdl8-ui.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 rules:
 - apiGroups:
-  - acid.zalan.do
+  - acid.cosmic.rocks
   resources:
   - postgresqls
   verbs:

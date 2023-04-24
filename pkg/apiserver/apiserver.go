@@ -11,11 +11,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/cosmicrocks/scdl8/pkg/cluster"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
+	"github.com/cosmicrocks/scdl8/pkg/util"
+	"github.com/cosmicrocks/scdl8/pkg/util/config"
 	"github.com/sirupsen/logrus"
-	"github.com/zalando/postgres-operator/pkg/cluster"
-	"github.com/zalando/postgres-operator/pkg/spec"
-	"github.com/zalando/postgres-operator/pkg/util"
-	"github.com/zalando/postgres-operator/pkg/util/config"
 )
 
 const (

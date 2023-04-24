@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "postgres-operator.name" -}}
+{{- define "scdl8.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "postgres-operator.fullname" -}}
+{{- define "scdl8.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,28 +27,28 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create a service account name.
 */}}
-{{- define "postgres-operator.serviceAccountName" -}}
-{{ default (include "postgres-operator.fullname" .) .Values.serviceAccount.name }}
+{{- define "scdl8.serviceAccountName" -}}
+{{ default (include "scdl8.fullname" .) .Values.serviceAccount.name }}
 {{- end -}}
 
 {{/*
 Create a pod service account name.
 */}}
 {{- define "postgres-pod.serviceAccountName" -}}
-{{ default (printf "%s-%v" (include "postgres-operator.fullname" .) "pod") .Values.podServiceAccount.name }}
+{{ default (printf "%s-%v" (include "scdl8.fullname" .) "pod") .Values.podServiceAccount.name }}
 {{- end -}}
 
 {{/*
 Create a controller ID.
 */}}
-{{- define "postgres-operator.controllerID" -}}
-{{ default (include "postgres-operator.fullname" .) .Values.controllerID.name }}
+{{- define "scdl8.controllerID" -}}
+{{ default (include "scdl8.fullname" .) .Values.controllerID.name }}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "postgres-operator.chart" -}}
+{{- define "scdl8.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 

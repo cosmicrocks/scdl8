@@ -33,7 +33,7 @@ import (
 	"strconv"
 	"strings"
 
-	PostgresqlLister "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/typed/acid.zalan.do/v1"
+	PostgresqlLister "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/typed/acid.cosmic.rocks/v1"
 	v1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -43,7 +43,7 @@ import (
 )
 
 const (
-	OperatorName     = "postgres-operator"
+	OperatorName     = "scdl8"
 	DefaultNamespace = "default"
 )
 

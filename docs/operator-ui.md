@@ -4,7 +4,7 @@ The Postgres Operator UI provides a graphical interface for a convenient
 database-as-a-service user experience. Once the operator is set up by database
 and/or Kubernetes (K8s) admins it's very easy for other teams to create, clone,
 watch, edit and delete their own Postgres clusters. Information on the setup
-and technical details can be found in the [admin docs](administrator.md#setting-up-the-postgres-operator-ui).
+and technical details can be found in the [admin docs](administrator.md#setting-up-the-scdl8-ui).
 
 ## Create a new cluster
 
@@ -33,8 +33,8 @@ status page.
 Usually, the startup should only take up to 1 minute. If you feel the process
 got stuck click on the "Logs" button to inspect the operator logs. If the logs
 look fine, but the UI seems to got stuck, check if you are have configured the
-same [cluster name label](https://github.com/zalando/postgres-operator/blob/master/ui/manifests/deployment.yaml#L45) like for the
-[operator](https://github.com/zalando/postgres-operator/blob/master/manifests/configmap.yaml#L13).
+same [cluster name label](https://github.com/cosmicrocks/scdl8/blob/master/ui/manifests/deployment.yaml#L45) like for the
+[operator](https://github.com/cosmicrocks/scdl8/blob/master/manifests/configmap.yaml#L13).
 
 From the "Status" field in the top menu you can also retrieve the logs and queue
 of each worker the operator is using. The number of concurrent workers can be

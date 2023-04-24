@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ package fake
 import (
 	"context"
 
-	acidzalandov1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
+	acidcosmicv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	testing "k8s.io/client-go/testing"
@@ -39,17 +39,17 @@ type FakeOperatorConfigurations struct {
 	ns   string
 }
 
-var operatorconfigurationsResource = schema.GroupVersionResource{Group: "acid.zalan.do", Version: "v1", Resource: "operatorconfigurations"}
+var operatorconfigurationsResource = schema.GroupVersionResource{Group: "acid.cosmic.rocks", Version: "v1", Resource: "operatorconfigurations"}
 
-var operatorconfigurationsKind = schema.GroupVersionKind{Group: "acid.zalan.do", Version: "v1", Kind: "OperatorConfiguration"}
+var operatorconfigurationsKind = schema.GroupVersionKind{Group: "acid.cosmic.rocks", Version: "v1", Kind: "OperatorConfiguration"}
 
 // Get takes name of the operatorConfiguration, and returns the corresponding operatorConfiguration object, and an error if there is any.
-func (c *FakeOperatorConfigurations) Get(ctx context.Context, name string, options v1.GetOptions) (result *acidzalandov1.OperatorConfiguration, err error) {
+func (c *FakeOperatorConfigurations) Get(ctx context.Context, name string, options v1.GetOptions) (result *acidcosmicv1.OperatorConfiguration, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewGetAction(operatorconfigurationsResource, c.ns, name), &acidzalandov1.OperatorConfiguration{})
+		Invokes(testing.NewGetAction(operatorconfigurationsResource, c.ns, name), &acidcosmicv1.OperatorConfiguration{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*acidzalandov1.OperatorConfiguration), err
+	return obj.(*acidcosmicv1.OperatorConfiguration), err
 }

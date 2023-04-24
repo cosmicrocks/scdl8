@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,10 @@ import (
 	"context"
 	time "time"
 
-	zalandoorgv1 "github.com/zalando/postgres-operator/pkg/apis/zalando.org/v1"
-	versioned "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned"
-	internalinterfaces "github.com/zalando/postgres-operator/pkg/generated/informers/externalversions/internalinterfaces"
-	v1 "github.com/zalando/postgres-operator/pkg/generated/listers/zalando.org/v1"
+	cosmicorgv1 "github.com/cosmicrocks/scdl8/pkg/apis/cosmic.rocks/v1"
+	versioned "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned"
+	internalinterfaces "github.com/cosmicrocks/scdl8/pkg/generated/informers/externalversions/internalinterfaces"
+	v1 "github.com/cosmicrocks/scdl8/pkg/generated/listers/cosmic.rocks/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -68,16 +68,16 @@ func NewFilteredFabricEventStreamInformer(client versioned.Interface, namespace 
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.ZalandoV1().FabricEventStreams(namespace).List(context.TODO(), options)
+				return client.CosmicRocksV1().FabricEventStreams(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.ZalandoV1().FabricEventStreams(namespace).Watch(context.TODO(), options)
+				return client.CosmicRocksV1().FabricEventStreams(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&zalandoorgv1.FabricEventStream{},
+		&cosmicorgv1.FabricEventStream{},
 		resyncPeriod,
 		indexers,
 	)
@@ -88,7 +88,7 @@ func (f *fabricEventStreamInformer) defaultInformer(client versioned.Interface, 
 }
 
 func (f *fabricEventStreamInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&zalandoorgv1.FabricEventStream{}, f.defaultInformer)
+	return f.factory.InformerFor(&cosmicorgv1.FabricEventStream{}, f.defaultInformer)
 }
 
 func (f *fabricEventStreamInformer) Lister() v1.FabricEventStreamLister {

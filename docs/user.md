@@ -5,10 +5,10 @@ Learn how to work with the Postgres Operator in a Kubernetes (K8s) environment.
 ## Create a manifest for a new PostgreSQL cluster
 
 Make sure you have [set up](quickstart.md) the operator. Then you can create a
-new Postgres cluster by applying manifest like this [minimal example](https://github.com/zalando/postgres-operator/blob/master/manifests/minimal-postgres-manifest.yaml):
+new Postgres cluster by applying manifest like this [minimal example](https://github.com/cosmicrocks/scdl8/blob/master/manifests/minimal-postgres-manifest.yaml):
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: acid-minimal-cluster
@@ -19,7 +19,7 @@ spec:
   numberOfInstances: 2
   users:
     # database owner
-    zalando:
+    cosmicrocks:
     - superuser
     - createdb
 
@@ -28,12 +28,12 @@ spec:
 
   #databases: name->owner
   databases:
-    foo: zalando
+    foo: cosmicrocks
   postgresql:
     version: "15"
 ```
 
-Once you cloned the Postgres Operator [repository](https://github.com/zalando/postgres-operator)
+Once you cloned the Postgres Operator [repository](https://github.com/cosmicrocks/scdl8)
 you can find this example also in the manifests folder:
 
 ```bash
@@ -46,7 +46,7 @@ The minimum volume size to run the `postgresql` resource on Elastic Block
 Storage (EBS) is `1Gi`.
 
 Note, that when `enable_team_id_clustername_prefix` is set to `true` the name
-of the cluster must start with the `teamId` and `-`. At Zalando we use team IDs
+of the cluster must start with the `teamId` and `-`. At Cosmicrocks we use team IDs
 (nicknames) to lower chances of duplicate cluster names and colliding entities.
 The team ID would also be used to query an API to get all members of a team
 and create [database roles](#teams-api-roles) for them. Besides, the maximum
@@ -89,7 +89,7 @@ from the K8s secret which was generated when creating `acid-minimal-cluster`.
 As non-encrypted connections are rejected by default set SSL mode to `require`:
 
 ```bash
-export PGPASSWORD=$(kubectl get secret postgres.acid-minimal-cluster.credentials.postgresql.acid.zalan.do -o 'jsonpath={.data.password}' | base64 -d)
+export PGPASSWORD=$(kubectl get secret postgres.acid-minimal-cluster.credentials.postgresql.acid.cosmic.rocks -o 'jsonpath={.data.password}' | base64 -d)
 export PGSSLMODE=require
 psql -U postgres -h localhost -p 6432
 ```
@@ -102,7 +102,7 @@ possible to use the more recent `scram-sha-256` method by changing the
 directly from the cluster manifest:
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: acid-minimal-cluster
@@ -134,8 +134,8 @@ chapter.
 ### Manifest roles
 
 Manifest roles are defined directly in the cluster manifest. See
-[minimal postgres manifest](https://github.com/zalando/postgres-operator/blob/master/manifests/minimal-postgres-manifest.yaml)
-for an example of `zalando` role, defined with `superuser` and `createdb` flags.
+[minimal postgres manifest](https://github.com/cosmicrocks/scdl8/blob/master/manifests/minimal-postgres-manifest.yaml)
+for an example of `cosmicrocks` role, defined with `superuser` and `createdb` flags.
 
 Manifest roles are defined as a dictionary, with a role name as a key and a
 list of role options as a value. For a role without any options it is best to
@@ -152,7 +152,7 @@ specified explicitly.
 
 The operator automatically generates a password for each manifest role and
 places it in the secret named
-`{username}.{clustername}.credentials.postgresql.acid.zalan.do` in the
+`{username}.{clustername}.credentials.postgresql.acid.cosmic.rocks` in the
 same namespace as the cluster. This way, the application running in the
 K8s cluster and connecting to Postgres can obtain the password right from the
 secret, without ever sharing it outside of the cluster.
@@ -182,7 +182,7 @@ be in the form of `namespace.username`.
 
 For such usernames, the secret is created in the given namespace and its name is
 of the following form,
-`{namespace}.{username}.{clustername}.credentials.postgresql.acid.zalan.do`
+`{namespace}.{username}.{clustername}.credentials.postgresql.acid.cosmic.rocks`
 
 ### Infrastructure roles
 
@@ -223,7 +223,7 @@ the user name, password etc. The secret itself is referenced by the
 above list them separately.
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
   name: postgresql-operator-configuration
@@ -243,7 +243,7 @@ Note, only the CRD-based configuration allows for referencing multiple secrets.
 As of now, the ConfigMap is restricted to either one or the existing template
 option with `infrastructure_roles_secret_name`. Please, refer to the example
 manifests to understand how `infrastructure_roles_secrets` has to be configured
-for the [configmap](https://github.com/zalando/postgres-operator/blob/master/manifests/configmap.yaml) or [CRD configuration](https://github.com/zalando/postgres-operator/blob/master/manifests/postgresql-operator-default-configuration.yaml).
+for the [configmap](https://github.com/cosmicrocks/scdl8/blob/master/manifests/configmap.yaml) or [CRD configuration](https://github.com/cosmicrocks/scdl8/blob/master/manifests/postgresql-operator-default-configuration.yaml).
 
 If both `infrastructure_roles_secret_name` and `infrastructure_roles_secrets`
 are defined the operator will create roles for both of them. So make sure,
@@ -288,8 +288,8 @@ Since an infrastructure role is created uniformly on all clusters managed by
 the operator, it makes no sense to define it without the password. Such
 definitions will be ignored with a prior warning.
 
-See [infrastructure roles secret](https://github.com/zalando/postgres-operator/blob/master/manifests/infrastructure-roles.yaml)
-and [infrastructure roles configmap](https://github.com/zalando/postgres-operator/blob/master/manifests/infrastructure-roles-configmap.yaml)
+See [infrastructure roles secret](https://github.com/cosmicrocks/scdl8/blob/master/manifests/infrastructure-roles.yaml)
+and [infrastructure roles configmap](https://github.com/cosmicrocks/scdl8/blob/master/manifests/infrastructure-roles-configmap.yaml)
 for the examples.
 
 ### Teams API roles
@@ -305,7 +305,7 @@ returns usernames. A minimal Teams API should work like this:
 /.../<teamname> -> ["name","anothername"]
 ```
 
-A ["fake" Teams API](https://github.com/zalando/postgres-operator/blob/master/manifests/fake-teams-api.yaml) deployment is provided
+A ["fake" Teams API](https://github.com/cosmicrocks/scdl8/blob/master/manifests/fake-teams-api.yaml) deployment is provided
 in the manifests folder to set up a basic API around whatever services is used
 for user management. The Teams API's URL is set in the operator's
 [configuration](reference/operator_parameters.md#automatic-creation-of-human-users-in-the-database)
@@ -320,12 +320,12 @@ Postgres clusters are associated with one team by providing the `teamID` in
 the manifest. Additional superuser teams can be configured as mentioned in
 the previous paragraph. However, this is a global setting. To assign
 additional teams, superuser teams and single users to clusters of a given
-team, use the [PostgresTeam CRD](https://github.com/zalando/postgres-operator/blob/master/manifests/postgresteam.crd.yaml).
+team, use the [PostgresTeam CRD](https://github.com/cosmicrocks/scdl8/blob/master/manifests/postgresteam.crd.yaml).
 
 Note, by default the `PostgresTeam` support is disabled in the configuration.
 Switch `enable_postgres_team_crd` flag to `true` and the operator will start to
 watch for this CRD. Make sure, the cluster role is up to date and contains a
-section for [PostgresTeam](https://github.com/zalando/postgres-operator/blob/master/manifests/operator-service-account-rbac.yaml#L30).
+section for [PostgresTeam](https://github.com/cosmicrocks/scdl8/blob/master/manifests/operator-service-account-rbac.yaml#L30).
 
 #### Additional teams
 
@@ -334,7 +334,7 @@ define a mapping with the `PostgresTeam` Kubernetes resource. The Postgres
 Operator will read such team mappings each time it syncs all Postgres clusters.
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: PostgresTeam
 metadata:
   name: custom-team-membership
@@ -427,7 +427,7 @@ To still add a database role for former team members list their role under
 the `additionalMembers` section of the `PostgresTeam` resource:
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: PostgresTeam
 metadata:
   name: custom-team-membership
@@ -710,7 +710,7 @@ place nodes with certain hardware capabilities (e.g. SSD drives) in certain envi
 e.g. for PCI compliance.
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: acid-minimal-cluster
@@ -758,7 +758,7 @@ source cluster. If you create it in the same Kubernetes environment, use a
 different name.
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: acid-minimal-cluster-clone
@@ -778,7 +778,7 @@ The operator will try to find the WAL location based on the configured
 You can find the UID of the source cluster in its metadata:
 
 ```yaml
-apiVersion: acid.zalan.do/v1
+apiVersion: acid.cosmic.rocks/v1
 kind: postgresql
 metadata:
   name: acid-minimal-cluster
@@ -867,7 +867,7 @@ point you should restore.
 
 ## Setting up a standby cluster
 
-Standby cluster is a [Patroni feature](https://github.com/zalando/patroni/blob/master/docs/replica_bootstrap.rst#standby-cluster)
+Standby cluster is a [Patroni feature](https://github.com/cosmicrocks/patroni/blob/master/docs/replica_bootstrap.rst#standby-cluster)
 that first clones a database, and keeps replicating changes afterwards. It can
 exist in a different location than its source database, but unlike cloning,
 the PostgreSQL version between source and target cluster has to be the same.
@@ -1034,7 +1034,7 @@ spec:
     - all
     volumeSource:
       emptyDir: {}
-  sidecars: 
+  sidecars:
   - name: "container-name"
     image: "company/image:tag"
     volumeMounts:
@@ -1202,7 +1202,7 @@ configuration or use the `spiloFSGroup` field per Postgres cluster manifest.
 
 For testing purposes, you can generate a self-signed certificate with openssl:
 ```sh
-openssl req -x509 -nodes -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=acid.zalan.do"
+openssl req -x509 -nodes -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=acid.cosmic.rocks"
 ```
 
 Upload the cert as a kubernetes secret:
@@ -1223,7 +1223,7 @@ kubectl create secret generic pg-tls \
 Then configure the postgres resource with the TLS secret:
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 
 metadata:
@@ -1242,7 +1242,7 @@ kubectl create secret generic pg-tls-ca --from-file=ca.crt=ca.crt
 Then configure the postgres resource with the TLS secret:
 
 ```yaml
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 
 metadata:

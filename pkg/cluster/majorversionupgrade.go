@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/zalando/postgres-operator/pkg/spec"
-	"github.com/zalando/postgres-operator/pkg/util"
+	"github.com/cosmicrocks/scdl8/pkg/spec"
+	"github.com/cosmicrocks/scdl8/pkg/util"
 	v1 "k8s.io/api/core/v1"
 )
 
@@ -17,7 +17,6 @@ var VersionMap = map[string]int{
 	"13": 130000,
 	"14": 140000,
 	"15": 150000,
-
 }
 
 // IsBiggerPostgresVersion Compare two Postgres version numbers

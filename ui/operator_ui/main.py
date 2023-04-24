@@ -77,7 +77,7 @@ TEAM_SERVICE_URL = getenv('TEAM_SERVICE_URL')
 ACCESS_TOKEN_URL = getenv('ACCESS_TOKEN_URL')
 TOKENINFO_URL = getenv('OAUTH2_TOKEN_INFO_URL')
 
-OPERATOR_API_URL = getenv('OPERATOR_API_URL', 'http://postgres-operator')
+OPERATOR_API_URL = getenv('OPERATOR_API_URL', 'http://scdl8')
 OPERATOR_CLUSTER_NAME_LABEL = getenv('OPERATOR_CLUSTER_NAME_LABEL', 'cluster-name')
 OPERATOR_UI_CONFIG = loads(getenv('OPERATOR_UI_CONFIG', '{}'))
 OPERATOR_UI_MAINTENANCE_CHECK = getenv('OPERATOR_UI_MAINTENANCE_CHECK', '{}')
@@ -103,8 +103,8 @@ COST_CORE = float(getenv('COST_CORE', 0.0575))  # Core per hour m5.2xlarge / 8.
 COST_MEMORY = float(getenv('COST_MEMORY', 0.014375))  # Memory GB m5.2xlarge / 32.
 COST_ELB = float(getenv('COST_ELB', 0.03))     # per hour
 
-# maximum and limitation of IOPS and throughput 
-FREE_IOPS = float(getenv('FREE_IOPS', 3000)) 
+# maximum and limitation of IOPS and throughput
+FREE_IOPS = float(getenv('FREE_IOPS', 3000))
 LIMIT_IOPS = float(getenv('LIMIT_IOPS', 16000))
 FREE_THROUGHPUT = float(getenv('FREE_THROUGHPUT', 125))
 LIMIT_THROUGHPUT = float(getenv('LIMIT_THROUGHPUT', 1000))
@@ -315,7 +315,7 @@ def index():
 
 
 DEFAULT_UI_CONFIG = {
-    'docs_link': 'https://github.com/zalando/postgres-operator',
+    'docs_link': 'https://github.com/cosmicrocks/scdl8',
     'odd_host_visible': True,
     'nat_gateways_visible': True,
     'users_visible': True,
@@ -337,7 +337,7 @@ DEFAULT_UI_CONFIG = {
     'cost_memory': COST_MEMORY,
     'cost_elb': COST_ELB,
     'min_pods': MIN_PODS,
-    'free_iops': FREE_IOPS, 
+    'free_iops': FREE_IOPS,
     'free_throughput': FREE_THROUGHPUT,
     'limit_iops': LIMIT_IOPS,
     'limit_throughput': LIMIT_THROUGHPUT
@@ -347,7 +347,7 @@ DEFAULT_UI_CONFIG = {
 @app.route('/config')
 @authorize
 def get_config():
-    config = DEFAULT_UI_CONFIG.copy() 
+    config = DEFAULT_UI_CONFIG.copy()
     config.update(OPERATOR_UI_CONFIG)
 
     config['namespaces'] = (
@@ -550,7 +550,7 @@ def get_postgresqls():
 
 
 # Note these are meant to be consistent with the operator backend validations;
-# See https://github.com/zalando/postgres-operator/blob/master/pkg/cluster/cluster.go  # noqa
+# See https://github.com/cosmicrocks/scdl8/blob/master/pkg/cluster/cluster.go  # noqa
 VALID_SIZE = compile(r'^[1-9][0-9]{0,3}Gi$')
 VALID_CLUSTER_NAME = compile(r'^[a-z0-9]+[a-z0-9\-]+[a-z0-9]+$')
 VALID_DATABASE_NAME = compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')

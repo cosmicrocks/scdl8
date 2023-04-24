@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Compose, Zalando SE
+Copyright 2023 Compose, Cosmicrocks SE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,22 +25,22 @@ SOFTWARE.
 package fake
 
 import (
-	v1 "github.com/zalando/postgres-operator/pkg/generated/clientset/versioned/typed/zalando.org/v1"
+	v1 "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/typed/cosmic.rocks/v1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )
 
-type FakeZalandoV1 struct {
+type FakeCosmicRocksV1 struct {
 	*testing.Fake
 }
 
-func (c *FakeZalandoV1) FabricEventStreams(namespace string) v1.FabricEventStreamInterface {
+func (c *FakeCosmicRocksV1) FabricEventStreams(namespace string) v1.FabricEventStreamInterface {
 	return &FakeFabricEventStreams{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeZalandoV1) RESTClient() rest.Interface {
+func (c *FakeCosmicRocksV1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }

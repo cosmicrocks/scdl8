@@ -1,4 +1,4 @@
-name: Publish multiarch postgres-operator image on ghcr.io
+name: Publish multiarch scdl8 image on ghcr.io
 
 env:
   REGISTRY: ghcr.io

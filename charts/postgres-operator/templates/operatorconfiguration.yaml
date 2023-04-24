@@ -1,12 +1,12 @@
 {{- if eq .Values.configTarget "OperatorConfigurationCRD" }}
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: OperatorConfiguration
 metadata:
-  name: {{ template "postgres-operator.fullname" . }}
+  name: {{ template "scdl8.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
-    helm.sh/chart: {{ template "postgres-operator.chart" . }}
+    app.kubernetes.io/name: {{ template "scdl8.name" . }}
+    helm.sh/chart: {{ template "scdl8.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 configuration:
@@ -20,7 +20,7 @@ configuration:
     pod_priority_class_name: {{ .Values.podPriorityClassName }}
     {{- end }}
     pod_service_account_name: {{ include "postgres-pod.serviceAccountName" . }}
-    oauth_token_secret_name: {{ template "postgres-operator.fullname" . }}
+    oauth_token_secret_name: {{ template "scdl8.fullname" . }}
 {{ tpl (toYaml .Values.configKubernetes) . | indent 4 }}
   postgres_pod_resources:
 {{ toYaml .Values.configPostgresPodResources | indent 4 }}

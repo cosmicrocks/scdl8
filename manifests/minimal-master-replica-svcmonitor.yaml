@@ -1,12 +1,12 @@
 # Here we use https://github.com/prometheus-community/helm-charts/charts/kube-prometheus-stack
-# Please keep the ServiceMonitor's label same as the Helm release name of kube-prometheus-stack 
+# Please keep the ServiceMonitor's label same as the Helm release name of kube-prometheus-stack
 
 apiVersion: v1
 kind: Namespace
 metadata:
   name: test-pg
 ---
-apiVersion: "acid.zalan.do/v1"
+apiVersion: "acid.cosmic.rocks/v1"
 kind: postgresql
 metadata:
   name: acid-minimal-cluster
@@ -19,12 +19,12 @@ spec:
     size: 1Gi
   numberOfInstances: 2
   users:
-    zalando:  # database owner
+    cosmicrocks:  # database owner
     - superuser
     - createdb
     foo_user: []  # role for application foo
   databases:
-    foo: zalando  # dbname: owner
+    foo: cosmicrocks  # dbname: owner
   preparedDatabases:
     bar: {}
   postgresql:
