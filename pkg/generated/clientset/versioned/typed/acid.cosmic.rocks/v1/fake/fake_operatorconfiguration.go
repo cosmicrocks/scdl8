@@ -25,40 +25,31 @@ SOFTWARE.
 package fake
 
 import (
-	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
-	cosmicv1 "github.com/cosmicrocks/scdl8/pkg/apis/cosmic.rocks/v1"
+	"context"
+
+	acidcosmicrocksv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
-	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
-	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	testing "k8s.io/client-go/testing"
 )
 
-var scheme = runtime.NewScheme()
-var codecs = serializer.NewCodecFactory(scheme)
-
-var localSchemeBuilder = runtime.SchemeBuilder{
-	acidv1.AddToScheme,
-	cosmicv1.AddToScheme,
+// FakeOperatorConfigurations implements OperatorConfigurationInterface
+type FakeOperatorConfigurations struct {
+	Fake *FakeAcidV1
+	ns   string
 }
 
-// AddToScheme adds all types of this clientset into the given scheme. This allows composition
-// of clientsets, like in:
-//
-//	import (
-//	  "k8s.io/client-go/kubernetes"
-//	  clientsetscheme "k8s.io/client-go/kubernetes/scheme"
-//	  aggregatorclientsetscheme "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset/scheme"
-//	)
-//
-//	kclientset, _ := kubernetes.NewForConfig(c)
-//	_ = aggregatorclientsetscheme.AddToScheme(clientsetscheme.Scheme)
-//
-// After this, RawExtensions in Kubernetes types will serialize kube-aggregator types
-// correctly.
-var AddToScheme = localSchemeBuilder.AddToScheme
+var operatorconfigurationsResource = schema.GroupVersionResource{Group: "acid.cosmic.rocks", Version: "v1", Resource: "operatorconfigurations"}
 
-func init() {
-	v1.AddToGroupVersion(scheme, schema.GroupVersion{Version: "v1"})
-	utilruntime.Must(AddToScheme(scheme))
+var operatorconfigurationsKind = schema.GroupVersionKind{Group: "acid.cosmic.rocks", Version: "v1", Kind: "OperatorConfiguration"}
+
+// Get takes name of the operatorConfiguration, and returns the corresponding operatorConfiguration object, and an error if there is any.
+func (c *FakeOperatorConfigurations) Get(ctx context.Context, name string, options v1.GetOptions) (result *acidcosmicrocksv1.OperatorConfiguration, err error) {
+	obj, err := c.Fake.
+		Invokes(testing.NewGetAction(operatorconfigurationsResource, c.ns, name), &acidcosmicrocksv1.OperatorConfiguration{})
+
+	if obj == nil {
+		return nil, err
+	}
+	return obj.(*acidcosmicrocksv1.OperatorConfiguration), err
 }
