@@ -95,7 +95,7 @@ kubectl get pod -l name=scdl8
 
 Yoy can reuse the provided Helm chart to deploy local operator build with the following command:
 ```bash
-helm install scdl8 ./charts/scdl8 --namespace cosmicrocks-operator --set image.tag=${TAG} --set image.pullPolicy=Never
+helm install scdl8 ./charts/scdl8 --namespace cosmicrocks-operator --set image.tag=${TAG} --set image.pullPolicy=Never --create-namespace
 ```
 
 ## Code generation

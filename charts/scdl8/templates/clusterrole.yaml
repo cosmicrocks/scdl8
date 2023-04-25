@@ -232,7 +232,7 @@ rules:
   verbs:
   - get
   - create
-# to create role bindings to the postgres-pod service account
+# to create role bindings to the scdl8-pod service account
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:

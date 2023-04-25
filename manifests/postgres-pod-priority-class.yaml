@@ -5,7 +5,7 @@ kind: PriorityClass
 metadata:
   labels:
     application: scdl8
-  name: postgres-pod-priority
+  name: scdl8-pod-priority
 preemptionPolicy: PreemptLowerPriority
 globalDefault: false
 value: 1000000

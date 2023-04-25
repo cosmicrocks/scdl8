@@ -13,7 +13,7 @@ data:
   {{- if .Values.podPriorityClassName }}
   pod_priority_class_name: {{ .Values.podPriorityClassName }}
   {{- end }}
-  pod_service_account_name: {{ include "postgres-pod.serviceAccountName" . }}
+  pod_service_account_name: {{ include "scdl8-pod.serviceAccountName" . }}
 {{- include "flattenValuesForConfigMap" .Values.configGeneral | indent 2 }}
 {{- include "flattenValuesForConfigMap" .Values.configUsers | indent 2 }}
 {{- include "flattenValuesForConfigMap" .Values.configMajorVersionUpgrade | indent 2 }}

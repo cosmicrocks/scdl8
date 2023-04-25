@@ -34,7 +34,7 @@ Create a service account name.
 {{/*
 Create a pod service account name.
 */}}
-{{- define "postgres-pod.serviceAccountName" -}}
+{{- define "scdl8-pod.serviceAccountName" -}}
 {{ default (printf "%s-%v" (include "scdl8.fullname" .) "pod") .Values.podServiceAccount.name }}
 {{- end -}}
 

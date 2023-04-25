@@ -19,7 +19,7 @@ configuration:
     {{- if .Values.podPriorityClassName }}
     pod_priority_class_name: {{ .Values.podPriorityClassName }}
     {{- end }}
-    pod_service_account_name: {{ include "postgres-pod.serviceAccountName" . }}
+    pod_service_account_name: {{ include "scdl8-pod.serviceAccountName" . }}
     oauth_token_secret_name: {{ template "scdl8.fullname" . }}
 {{ tpl (toYaml .Values.configKubernetes) . | indent 4 }}
   postgres_pod_resources:

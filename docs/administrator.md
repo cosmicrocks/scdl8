@@ -254,7 +254,7 @@ update of the pods because the UID is used as part of backup path to S3.
 The manifest [`operator-service-account-rbac.yaml`](https://github.com/cosmicrocks/scdl8/blob/master/manifests/operator-service-account-rbac.yaml)
 defines the service account, cluster roles and bindings needed for the operator
 to function under access control restrictions. The file also includes a cluster
-role `postgres-pod` with privileges for Patroni to watch and manage pods and
+role `scdl8-pod` with privileges for Patroni to watch and manage pods and
 endpoints. To deploy the operator with this RBAC policies use:
 
 ```bash
@@ -268,7 +268,7 @@ kubectl create -f manifests/minimal-postgres-manifest.yaml
 
 For each namespace the operator watches it creates (or reads) a service account
 and role binding to be used by the Postgres Pods. The service account is bound
-to the `postgres-pod` cluster role. The name and definitions of these resources
+to the `scdl8-pod` cluster role. The name and definitions of these resources
 can be [configured](reference/operator_parameters.md#kubernetes-resources).
 Note, that the operator performs **no** further syncing of namespaced service
 accounts and role bindings.
@@ -655,7 +655,7 @@ metadata:
   name: scdl8
 data:
   # referencing config map with custom settings
-  pod_environment_configmap: default/postgres-pod-config
+  pod_environment_configmap: default/scdl8-pod-config
 ```
 
 **OperatorConfiguration**
@@ -668,16 +668,16 @@ metadata:
 configuration:
   kubernetes:
     # referencing config map with custom settings
-    pod_environment_configmap: default/postgres-pod-config
+    pod_environment_configmap: default/scdl8-pod-config
 ```
 
-**referenced ConfigMap `postgres-pod-config`**
+**referenced ConfigMap `scdl8-pod-config`**
 
 ```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-pod-config
+  name: scdl8-pod-config
   namespace: default
 data:
   MY_CUSTOM_VAR: value
@@ -702,7 +702,7 @@ metadata:
   name: scdl8
 data:
   # referencing secret with custom environment variables
-  pod_environment_secret: postgres-pod-secrets
+  pod_environment_secret: scdl8-pod-secrets
 ```
 
 **OperatorConfiguration**
@@ -715,16 +715,16 @@ metadata:
 configuration:
   kubernetes:
     # referencing secret with custom environment variables
-    pod_environment_secret: postgres-pod-secrets
+    pod_environment_secret: scdl8-pod-secrets
 ```
 
-**referenced Secret `postgres-pod-secrets`**
+**referenced Secret `scdl8-pod-secrets`**
 
 ```yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: postgres-pod-secrets
+  name: scdl8-pod-secrets
   namespace: default
 data:
   MY_CUSTOM_VAR: dmFsdWU=
@@ -927,7 +927,7 @@ metadata:
   name: scdl8
 data:
   aws_region: eu-central-1
-  kube_iam_role: postgres-pod-role
+  kube_iam_role: scdl8-pod-role
   wal_s3_bucket: your-backup-path
 ```
 
@@ -941,7 +941,7 @@ metadata:
 configuration:
   aws_or_gcp:
     aws_region: eu-central-1
-    kube_iam_role: postgres-pod-role
+    kube_iam_role: scdl8-pod-role
     wal_s3_bucket: your-backup-path
 ```
 
@@ -952,7 +952,7 @@ Postgres can send compressed WAL files to the given S3 bucket:
   PostgresPodRole:
     Type: "AWS::IAM::Role"
     Properties:
-      RoleName: "postgres-pod-role"
+      RoleName: "scdl8-pod-role"
       Path: "/"
       Policies:
         - PolicyName: "SpiloS3Access"
@@ -1009,7 +1009,7 @@ needed.
 ```bash
 gcloud iam service-accounts add-iam-policy-binding <GCP_SERVICE_ACCOUNT_NAME>@<GCP_PROJECT_ID>.iam.gserviceaccount.com \
     --role roles/iam.workloadIdentityUser \
-    --member "serviceAccount:PROJECT_ID.svc.id.goog[<POSTGRES_OPERATOR_NS>/postgres-pod-custom]"
+    --member "serviceAccount:PROJECT_ID.svc.id.goog[<POSTGRES_OPERATOR_NS>/scdl8-pod-custom]"
 ```
 
 The configuration parameters that we will be using are:
@@ -1025,7 +1025,7 @@ with the GCS bucket, e.g.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: postgres-pod-custom
+  name: scdl8-pod-custom
   namespace: <POSTGRES_OPERATOR_NS>
   annotations:
     iam.gke.io/gcp-service-account: <GCP_SERVICE_ACCOUNT_NAME>@<GCP_PROJECT_ID>.iam.gserviceaccount.com
@@ -1043,7 +1043,7 @@ be specified in the chart's values file, e.g.:
 ```yml
 ...
 podServiceAccount:
-  name: postgres-pod-custom
+  name: scdl8-pod-custom
 ```
 
 3. Setup your operator configuration values. Ensure that the operator's configuration
@@ -1214,7 +1214,7 @@ directory within Spilo.
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-pod-config
+  name: scdl8-pod-config
 data:
   AWS_REGION: "eu-west-1"
   AWS_ACCESS_KEY_ID: "****"

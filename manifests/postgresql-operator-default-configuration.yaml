@@ -89,10 +89,10 @@ configuration:
     # pod_environment_configmap: "default/my-custom-config"
     # pod_environment_secret: "my-custom-secret"
     pod_management_policy: "ordered_ready"
-    # pod_priority_class_name: "postgres-pod-priority"
+    # pod_priority_class_name: "scdl8-pod-priority"
     pod_role_label: spilo-role
     # pod_service_account_definition: ""
-    pod_service_account_name: postgres-pod
+    pod_service_account_name: scdl8-pod
     # pod_service_account_role_binding_definition: ""
     pod_terminate_grace_period: 5m
     secret_name_template: "{username}.{cluster}.credentials.{tprkind}.{tprgroup}"

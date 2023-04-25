@@ -77,7 +77,7 @@ To install the Postgres Operator in OpenShift you have to change the config
 parameter `kubernetes_use_configmaps` to `"true"`. Otherwise, the operator
 and Patroni will store leader and config keys in `Endpoints` that are not
 supported in OpenShift. This requires also a slightly different set of rules
-for the `scdl8` and `postgres-pod` cluster roles.
+for the `scdl8` and `scdl8-pod` cluster roles.
 
 ```bash
 oc create -f manifests/operator-service-account-rbac-openshift.yaml

@@ -221,7 +221,7 @@ func (c *Controller) initPodServiceAccount() {
 			"apiVersion": "v1",
 			"kind": "ServiceAccount",
 			"metadata": {
-				"name": "postgres-pod"
+				"name": "scdl8-pod"
 			}
 		}`
 

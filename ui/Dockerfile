@@ -1,4 +1,4 @@
-FROM alpine:3.15
+FROM alpine:3.17
 LABEL maintainer="Team ACID @ Cosmicrocks <team-acid@cosmicrocks.de>"
 
 EXPOSE 8081

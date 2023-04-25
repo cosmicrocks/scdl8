@@ -263,7 +263,7 @@ configuration they are grouped under the `kubernetes` key.
   service account used by Patroni running on individual Pods to communicate
   with the operator. Required even if native Kubernetes support in Patroni is
   not used, because Patroni keeps pod labels in sync with the instance role.
-  The default is `postgres-pod`.
+  The default is `scdl8-pod`.
 
 * **pod_service_account_definition**
   On Postgres cluster creation the operator tries to create the service account
@@ -277,7 +277,7 @@ configuration they are grouped under the `kubernetes` key.
   sufficient for the pods to start and for Patroni to access K8s endpoints;
   service account on its own lacks any such rights starting with K8s v1.8. If
   not explicitly defined by the user, a simple definition that binds the
-  account to the 'postgres-pod' [cluster role](https://github.com/cosmicrocks/scdl8/blob/master/manifests/operator-service-account-rbac.yaml#L198)
+  account to the 'scdl8-pod' [cluster role](https://github.com/cosmicrocks/scdl8/blob/master/manifests/operator-service-account-rbac.yaml#L198)
   will be used. The default is empty.
 
 * **pod_terminate_grace_period**

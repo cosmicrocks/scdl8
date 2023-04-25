@@ -34,6 +34,7 @@ docker: appjs
 
 push:
 	docker push "$(IMAGE):$(TAG)$(CDP_TAG)"
+	kind load docker-image "$(IMAGE):$(TAG)$(CDP_TAG)"
 
 mock:
 	docker run -it -p 8081:8081 "$(IMAGE):$(TAG)" --mock
