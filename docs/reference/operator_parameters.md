@@ -774,7 +774,7 @@ grouped under the `logical_backup` key.
   runs `pg_dumpall` on a replica if possible and uploads compressed results to
   an S3 bucket under the key `/spilo/pg_cluster_name/cluster_k8s_uuid/logical_backups`.
   The default image is the same image built with the Cosmicrocks-internal CI
-  pipeline. Default: "registry.opensource.cosmic.rocks/acid/logical-backup:v1.10.0"
+  pipeline. Default: "ghcr.io/cosmicrocks/logical-backup:v1.10.0"
 
 * **logical_backup_google_application_credentials**
   Specifies the path of the google cloud service account json file. Default is empty.
@@ -987,7 +987,7 @@ operator being able to provide some reasonable defaults.
 
 * **connection_pooler_image**
   Docker image to use for connection pooler deployment.
-  Default: "registry.opensource.cosmic.rocks/acid/pgbouncer"
+  Default: "ghcr.io/cosmicrocks/pgbouncer"
 
 * **connection_pooler_max_db_connections**
   How many connections the pooler can max hold. This value is divided among the

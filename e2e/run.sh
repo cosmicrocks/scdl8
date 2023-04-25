@@ -8,8 +8,8 @@ IFS=$'\n\t'
 
 readonly cluster_name="scdl8-e2e-tests"
 readonly kubeconfig_path="/tmp/kind-config-${cluster_name}"
-readonly spilo_image="registry.opensource.cosmic.rocks/acid/spilo-15-e2e:0.1"
-readonly e2e_test_runner_image="registry.opensource.cosmic.rocks/acid/scdl8-e2e-tests-runner:0.4"
+readonly spilo_image="ghcr.io/cosmicrocks/spilo-15-e2e:0.1"
+readonly e2e_test_runner_image="ghcr.io/cosmicrocks/scdl8-e2e-tests-runner:0.4"
 
 export GOPATH=${GOPATH-~/go}
 export PATH=${GOPATH}/bin:$PATH
@@ -19,11 +19,11 @@ echo "Kubeconfig path: ${kubeconfig_path}"
 
 function pull_images(){
   operator_tag=$(git describe --tags --always --dirty)
-  if [[ -z $(docker images -q registry.opensource.cosmic.rocks/acid/scdl8:${operator_tag}) ]]
+  if [[ -z $(docker images -q ghcr.io/cosmicrocks/scdl8:${operator_tag}) ]]
   then
-    docker pull registry.opensource.cosmic.rocks/acid/scdl8:latest
+    docker pull ghcr.io/cosmicrocks/scdl8:latest
   fi
-  operator_image=$(docker images --filter=reference="registry.opensource.cosmic.rocks/acid/scdl8" --format "{{.Repository}}:{{.Tag}}" | head -1)
+  operator_image=$(docker images --filter=reference="ghcr.io/cosmicrocks/scdl8" --format "{{.Repository}}:{{.Tag}}" | head -1)
 }
 
 function start_kind(){

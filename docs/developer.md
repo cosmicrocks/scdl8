@@ -43,7 +43,7 @@ Build the operator with the `make docker` command. You may define the TAG
 variable to assign an explicit tag to your Docker image and the IMAGE to set
 the image name. By default, the tag is computed with
 `git describe --tags --always --dirty` and the image is
-`registry.opensource.cosmic.rocks/acid/scdl8`
+`ghcr.io/cosmicrocks/scdl8`
 
 ```bash
 export TAG=$(git describe --tags --always --dirty)
@@ -72,7 +72,7 @@ make docker
 
 # kind
 make docker
-kind load docker-image registry.opensource.cosmic.rocks/acid/scdl8:${TAG} --name <kind-cluster-name>
+kind load docker-image ghcr.io/cosmicrocks/scdl8:${TAG} --name <kind-cluster-name>
 ```
 
 Then create a new Postgres Operator deployment.
@@ -274,7 +274,7 @@ Examples for fake K8s objects can be found in:
 
 The operator provides reference end-to-end (e2e) tests to
 ensure various infrastructure parts work smoothly together. The test code is available at `e2e/tests`.
-The special `registry.opensource.cosmic.rocks/acid/scdl8-e2e-tests-runner` image is used to run the tests. The container mounts the local `e2e/tests` directory at runtime, so whatever you modify in your local copy of the tests will be executed by a test runner. By maintaining a separate test runner image we avoid the need to re-build the e2e test image on every build.
+The special `ghcr.io/cosmicrocks/scdl8-e2e-tests-runner` image is used to run the tests. The container mounts the local `e2e/tests` directory at runtime, so whatever you modify in your local copy of the tests will be executed by a test runner. By maintaining a separate test runner image we avoid the need to re-build the e2e test image on every build.
 
 Each e2e execution tests a Postgres Operator image built from the current git branch. The test
 runner creates a new local K8s cluster using [kind](https://kind.sigs.k8s.io/),

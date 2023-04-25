@@ -487,7 +487,7 @@ spec:
                     pattern: '^(\d+m|\d+(\.\d{1,3})?)$'
                   logical_backup_docker_image:
                     type: string
-                    default: "registry.opensource.cosmic.rocks/acid/logical-backup:v1.10.0"
+                    default: "ghcr.io/cosmicrocks/logical-backup:v1.10.0"
                   logical_backup_google_application_credentials:
                     type: string
                   logical_backup_job_prefix:
@@ -635,7 +635,7 @@ spec:
                     default: "pooler"
                   connection_pooler_image:
                     type: string
-                    default: "registry.opensource.cosmic.rocks/acid/pgbouncer:master-27"
+                    default: "ghcr.io/cosmicrocks/pgbouncer:master-27"
                   connection_pooler_max_db_connections:
                     type: integer
                     default: 60

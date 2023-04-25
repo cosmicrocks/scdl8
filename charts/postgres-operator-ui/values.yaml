@@ -6,8 +6,8 @@ replicaCount: 1
 
 # configure ui image
 image:
-  registry: registry.opensource.cosmic.rocks
-  repository: acid/scdl8-ui
+  registry: ghcr.io/cosmicrocks
+  repository: scdl8-ui
   tag: v1.10.0
   pullPolicy: "IfNotPresent"
 

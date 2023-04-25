@@ -1,4 +1,4 @@
-FROM registry.opensource.cosmic.rocks/library/alpine-3.15:latest
+FROM alpine:3.15
 LABEL maintainer="Team ACID @ Cosmicrocks <team-acid@cosmicrocks.de>"
 
 EXPOSE 8081

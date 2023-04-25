@@ -25,7 +25,7 @@ func init() {
 }
 
 // SchemeGroupVersion is the group version used to register these objects.
-var SchemeGroupVersion = schema.GroupVersion{Group: cosmicrocks.GroupName, Version: APIVersion}
+var SchemeGroupVersion = schema.GroupVersion{Group: "cosmic.rocks", Version: APIVersion}
 
 // Resource takes an unqualified resource and returns a Group-qualified GroupResource.
 func Resource(resource string) schema.GroupResource {

@@ -1,6 +1,6 @@
 .PHONY: clean test appjs docker push mock
 
-IMAGE            ?= registry.opensource.cosmic.rocks/acid/scdl8-ui
+IMAGE            ?= ghcr.io/cosmicrocks/scdl8-ui
 VERSION          ?= $(shell git describe --tags --always --dirty)
 TAG              ?= $(VERSION)
 GITHEAD          = $(shell git rev-parse --short HEAD)

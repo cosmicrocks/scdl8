@@ -126,7 +126,7 @@ type Scalyr struct {
 // LogicalBackup defines configuration for logical backup
 type LogicalBackup struct {
 	LogicalBackupSchedule                     string `name:"logical_backup_schedule" default:"30 00 * * *"`
-	LogicalBackupDockerImage                  string `name:"logical_backup_docker_image" default:"registry.opensource.cosmic.rocks/acid/logical-backup:v1.10.0"`
+	LogicalBackupDockerImage                  string `name:"logical_backup_docker_image" default:"ghcr.io/cosmicrocks/logical-backup:v1.10.0"`
 	LogicalBackupProvider                     string `name:"logical_backup_provider" default:"s3"`
 	LogicalBackupAzureStorageAccountName      string `name:"logical_backup_azure_storage_account_name" default:""`
 	LogicalBackupAzureStorageContainer        string `name:"logical_backup_azure_storage_container" default:""`
@@ -151,7 +151,7 @@ type ConnectionPooler struct {
 	NumberOfInstances                    *int32 `name:"connection_pooler_number_of_instances" default:"2"`
 	Schema                               string `name:"connection_pooler_schema" default:"pooler"`
 	User                                 string `name:"connection_pooler_user" default:"pooler"`
-	Image                                string `name:"connection_pooler_image" default:"registry.opensource.cosmic.rocks/acid/pgbouncer"`
+	Image                                string `name:"connection_pooler_image" default:"ghcr.io/cosmicrocks/pgbouncer"`
 	Mode                                 string `name:"connection_pooler_mode" default:"transaction"`
 	MaxDBConnections                     *int32 `name:"connection_pooler_max_db_connections" default:"60"`
 	ConnectionPoolerDefaultCPURequest    string `name:"connection_pooler_default_cpu_request" default:"500m"`

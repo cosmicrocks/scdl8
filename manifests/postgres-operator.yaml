@@ -19,7 +19,7 @@ spec:
       serviceAccountName: scdl8
       containers:
       - name: scdl8
-        image: registry.opensource.cosmic.rocks/acid/scdl8:v1.10.0
+        image: ghcr.io/cosmicrocks/scdl8:v1.10.0
         imagePullPolicy: IfNotPresent
         resources:
           requests:

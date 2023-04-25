@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=registry.opensource.cosmic.rocks/library/alpine-3.15:latest
+ARG BASE_IMAGE=alpine:3.15
 ARG VERSION=latest
 
 FROM ubuntu:20.04 as builder

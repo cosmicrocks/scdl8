@@ -2,8 +2,8 @@
 
 export cluster_name="scdl8-e2e-tests"
 export kubeconfig_path="/tmp/kind-config-${cluster_name}"
-export operator_image="registry.opensource.cosmic.rocks/acid/scdl8:latest"
-export e2e_test_runner_image="registry.opensource.cosmic.rocks/acid/scdl8-e2e-tests-runner:0.4"
+export operator_image="ghcr.io/cosmicrocks/scdl8:latest"
+export e2e_test_runner_image="ghcr.io/cosmicrocks/scdl8-e2e-tests-runner:0.4"
 
 docker run -it --entrypoint /bin/bash --network=host -e "TERM=xterm-256color" \
     --mount type=bind,source="$(readlink -f ${kubeconfig_path})",target=/root/.kube/config \

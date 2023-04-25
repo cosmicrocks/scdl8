@@ -174,7 +174,7 @@ func (c *Controller) importConfigurationFromCRD(fromCRD *acidv1.OperatorConfigur
 
 	// logical backup config
 	result.LogicalBackupSchedule = util.Coalesce(fromCRD.LogicalBackup.Schedule, "30 00 * * *")
-	result.LogicalBackupDockerImage = util.Coalesce(fromCRD.LogicalBackup.DockerImage, "registry.opensource.cosmic.rocks/acid/logical-backup:v1.10.0")
+	result.LogicalBackupDockerImage = util.Coalesce(fromCRD.LogicalBackup.DockerImage, "ghcr.io/cosmicrocks/logical-backup:v1.10.0")
 	result.LogicalBackupProvider = util.Coalesce(fromCRD.LogicalBackup.BackupProvider, "s3")
 	result.LogicalBackupAzureStorageAccountName = fromCRD.LogicalBackup.AzureStorageAccountName
 	result.LogicalBackupAzureStorageAccountKey = fromCRD.LogicalBackup.AzureStorageAccountKey
@@ -255,7 +255,7 @@ func (c *Controller) importConfigurationFromCRD(fromCRD *acidv1.OperatorConfigur
 
 	result.ConnectionPooler.Image = util.Coalesce(
 		fromCRD.ConnectionPooler.Image,
-		"registry.opensource.cosmic.rocks/acid/pgbouncer")
+		"ghcr.io/cosmicrocks/pgbouncer")
 
 	result.ConnectionPooler.Mode = util.Coalesce(
 		fromCRD.ConnectionPooler.Mode,

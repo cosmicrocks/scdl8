@@ -23,7 +23,7 @@ spec:
       serviceAccountName: scdl8
       containers:
       - name: scdl8
-        image: registry.opensource.cosmic.rocks/acid/pgbouncer:master-27
+        image: ghcr.io/cosmicrocks/pgbouncer:master-27
         imagePullPolicy: IfNotPresent
         resources:
           requests:

@@ -181,7 +181,7 @@ func NewFromConfig(cfg *rest.Config) (KubernetesClient, error) {
 	kubeClient.OperatorConfigurationsGetter = kubeClient.AcidV1ClientSet.AcidV1()
 	kubeClient.PostgresTeamsGetter = kubeClient.AcidV1ClientSet.AcidV1()
 	kubeClient.PostgresqlsGetter = kubeClient.AcidV1ClientSet.AcidV1()
-	kubeClient.FabricEventStreamsGetter = kubeClient.CosmicRocksv1ClientSet.CosmicRocksV1()
+	kubeClient.FabricEventStreamsGetter = kubeClient.CosmicRocksv1ClientSet.CosmicV1()
 
 	return kubeClient, nil
 }

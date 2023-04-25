@@ -1380,7 +1380,7 @@ make docker
 
 # build in image in minikube docker env
 eval $(minikube docker-env)
-docker build -t registry.opensource.cosmic.rocks/acid/scdl8-ui:v1.8.1 .
+docker build -t ghcr.io/cosmicrocks/scdl8-ui:v1.8.1 .
 
 # apply UI manifests next to a running Postgres Operator
 kubectl apply -f manifests/

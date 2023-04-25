@@ -18,7 +18,7 @@ spec:
       serviceAccountName: scdl8-ui
       containers:
         - name: "service"
-          image: registry.opensource.cosmic.rocks/acid/scdl8-ui:v1.10.0
+          image: ghcr.io/cosmicrocks/scdl8-ui:v1.10.0
           ports:
             - containerPort: 8081
               protocol: "TCP"
