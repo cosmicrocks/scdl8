@@ -8,8 +8,8 @@ import (
 	"testing"
 
 	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
-	cosmicv1 "github.com/cosmicrocks/scdl8/pkg/apis/cosmic.rocks/v1"
-	fakecosmicv1 "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/fake"
+	cosmicrocksv1 "github.com/cosmicrocks/scdl8/pkg/apis/cosmic.rocks/v1"
+	fakecosmicrocksv1 "github.com/cosmicrocks/scdl8/pkg/generated/clientset/versioned/fake"
 	"github.com/cosmicrocks/scdl8/pkg/util"
 	"github.com/cosmicrocks/scdl8/pkg/util/config"
 	"github.com/cosmicrocks/scdl8/pkg/util/constants"
@@ -22,7 +22,7 @@ import (
 )
 
 func newFakeK8sStreamClient() (k8sutil.KubernetesClient, *fake.Clientset) {
-	cosmicClientSet := fakecosmicv1.NewSimpleClientset()
+	cosmicClientSet := fakecosmicrocksv1.NewSimpleClientset()
 	clientSet := fake.NewSimpleClientset()
 
 	return k8sutil.KubernetesClient{
@@ -81,7 +81,7 @@ var (
 		},
 	}
 
-	fes = &cosmicv1.FabricEventStream{
+	fes = &cosmicrocksv1.FabricEventStream{
 		TypeMeta: metav1.TypeMeta{
 			APIVersion: constants.EventStreamCRDApiVersion,
 			Kind:       constants.EventStreamCRDKind,
@@ -98,23 +98,23 @@ var (
 				},
 			},
 		},
-		Spec: cosmicv1.FabricEventStreamSpec{
+		Spec: cosmicrocksv1.FabricEventStreamSpec{
 			ApplicationId: appId,
-			EventStreams: []cosmicv1.EventStream{
-				cosmicv1.EventStream{
-					EventStreamFlow: cosmicv1.EventStreamFlow{
+			EventStreams: []cosmicrocksv1.EventStream{
+				cosmicrocksv1.EventStream{
+					EventStreamFlow: cosmicrocksv1.EventStreamFlow{
 						PayloadColumn: k8sutil.StringToPointer("b_payload"),
 						Type:          constants.EventStreamFlowPgGenericType,
 					},
-					EventStreamSink: cosmicv1.EventStreamSink{
+					EventStreamSink: cosmicrocksv1.EventStreamSink{
 						EventType:    "stream-type-a",
 						MaxBatchSize: k8sutil.UInt32ToPointer(uint32(100)),
 						Type:         constants.EventStreamSinkNakadiType,
 					},
-					EventStreamSource: cosmicv1.EventStreamSource{
+					EventStreamSource: cosmicrocksv1.EventStreamSource{
 						Filter: k8sutil.StringToPointer("[?(@.source.txId > 500 && @.source.lsn > 123456)]"),
-						Connection: cosmicv1.Connection{
-							DBAuth: cosmicv1.DBAuth{
+						Connection: cosmicrocksv1.Connection{
+							DBAuth: cosmicrocksv1.DBAuth{
 								Name:        fmt.Sprintf("fes-user.%s.credentials.postgresql.acid.cosmic.rocks", clusterName),
 								PasswordKey: "password",
 								Type:        constants.EventStreamSourceAuthType,
@@ -125,25 +125,25 @@ var (
 							PluginType: constants.EventStreamSourcePluginType,
 						},
 						Schema: "data",
-						EventStreamTable: cosmicv1.EventStreamTable{
+						EventStreamTable: cosmicrocksv1.EventStreamTable{
 							IDColumn: k8sutil.StringToPointer("b_id"),
 							Name:     "bar",
 						},
 						Type: constants.EventStreamSourcePGType,
 					},
 				},
-				cosmicv1.EventStream{
-					EventStreamFlow: cosmicv1.EventStreamFlow{
+				cosmicrocksv1.EventStream{
+					EventStreamFlow: cosmicrocksv1.EventStreamFlow{
 						Type: constants.EventStreamFlowPgGenericType,
 					},
-					EventStreamSink: cosmicv1.EventStreamSink{
+					EventStreamSink: cosmicrocksv1.EventStreamSink{
 						EventType:    "stream-type-b",
 						MaxBatchSize: k8sutil.UInt32ToPointer(uint32(100)),
 						Type:         constants.EventStreamSinkNakadiType,
 					},
-					EventStreamSource: cosmicv1.EventStreamSource{
-						Connection: cosmicv1.Connection{
-							DBAuth: cosmicv1.DBAuth{
+					EventStreamSource: cosmicrocksv1.EventStreamSource{
+						Connection: cosmicrocksv1.Connection{
+							DBAuth: cosmicrocksv1.DBAuth{
 								Name:        fmt.Sprintf("fes-user.%s.credentials.postgresql.acid.cosmic.rocks", clusterName),
 								PasswordKey: "password",
 								Type:        constants.EventStreamSourceAuthType,
@@ -154,7 +154,7 @@ var (
 							PluginType: constants.EventStreamSourcePluginType,
 						},
 						Schema: "data",
-						EventStreamTable: cosmicv1.EventStreamTable{
+						EventStreamTable: cosmicrocksv1.EventStreamTable{
 							Name: "foobar",
 						},
 						Type: constants.EventStreamSourcePGType,
@@ -250,25 +250,25 @@ func TestGenerateFabricEventStream(t *testing.T) {
 func TestSameStreams(t *testing.T) {
 	testName := "TestSameStreams"
 
-	stream1 := cosmicv1.EventStream{
-		EventStreamFlow: cosmicv1.EventStreamFlow{},
-		EventStreamSink: cosmicv1.EventStreamSink{
+	stream1 := cosmicrocksv1.EventStream{
+		EventStreamFlow: cosmicrocksv1.EventStreamFlow{},
+		EventStreamSink: cosmicrocksv1.EventStreamSink{
 			EventType: "stream-type-a",
 		},
-		EventStreamSource: cosmicv1.EventStreamSource{
-			EventStreamTable: cosmicv1.EventStreamTable{
+		EventStreamSource: cosmicrocksv1.EventStreamSource{
+			EventStreamTable: cosmicrocksv1.EventStreamTable{
 				Name: "foo",
 			},
 		},
 	}
 
-	stream2 := cosmicv1.EventStream{
-		EventStreamFlow: cosmicv1.EventStreamFlow{},
-		EventStreamSink: cosmicv1.EventStreamSink{
+	stream2 := cosmicrocksv1.EventStream{
+		EventStreamFlow: cosmicrocksv1.EventStreamFlow{},
+		EventStreamSink: cosmicrocksv1.EventStreamSink{
 			EventType: "stream-type-b",
 		},
-		EventStreamSource: cosmicv1.EventStreamSource{
-			EventStreamTable: cosmicv1.EventStreamTable{
+		EventStreamSource: cosmicrocksv1.EventStreamSource{
+			EventStreamTable: cosmicrocksv1.EventStreamTable{
 				Name: "bar",
 			},
 		},
@@ -276,42 +276,42 @@ func TestSameStreams(t *testing.T) {
 
 	tests := []struct {
 		subTest  string
-		streamsA []cosmicv1.EventStream
-		streamsB []cosmicv1.EventStream
+		streamsA []cosmicrocksv1.EventStream
+		streamsB []cosmicrocksv1.EventStream
 		match    bool
 		reason   string
 	}{
 		{
 			subTest:  "identical streams",
-			streamsA: []cosmicv1.EventStream{stream1, stream2},
-			streamsB: []cosmicv1.EventStream{stream1, stream2},
+			streamsA: []cosmicrocksv1.EventStream{stream1, stream2},
+			streamsB: []cosmicrocksv1.EventStream{stream1, stream2},
 			match:    true,
 			reason:   "",
 		},
 		{
 			subTest:  "same streams different order",
-			streamsA: []cosmicv1.EventStream{stream1, stream2},
-			streamsB: []cosmicv1.EventStream{stream2, stream1},
+			streamsA: []cosmicrocksv1.EventStream{stream1, stream2},
+			streamsB: []cosmicrocksv1.EventStream{stream2, stream1},
 			match:    true,
 			reason:   "",
 		},
 		{
 			subTest:  "same streams different order",
-			streamsA: []cosmicv1.EventStream{stream1},
-			streamsB: []cosmicv1.EventStream{stream1, stream2},
+			streamsA: []cosmicrocksv1.EventStream{stream1},
+			streamsB: []cosmicrocksv1.EventStream{stream1, stream2},
 			match:    false,
 			reason:   "number of defined streams is different",
 		},
 		{
 			subTest:  "different number of streams",
-			streamsA: []cosmicv1.EventStream{stream1},
-			streamsB: []cosmicv1.EventStream{stream1, stream2},
+			streamsA: []cosmicrocksv1.EventStream{stream1},
+			streamsB: []cosmicrocksv1.EventStream{stream1, stream2},
 			match:    false,
 			reason:   "number of defined streams is different",
 		},
 		{
 			subTest:  "event stream specs differ",
-			streamsA: []cosmicv1.EventStream{stream1, stream2},
+			streamsA: []cosmicrocksv1.EventStream{stream1, stream2},
 			streamsB: fes.Spec.EventStreams,
 			match:    false,
 			reason:   "number of defined streams is different",

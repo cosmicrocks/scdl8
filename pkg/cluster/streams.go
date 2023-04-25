@@ -8,14 +8,14 @@ import (
 	"strings"
 
 	acidv1 "github.com/cosmicrocks/scdl8/pkg/apis/acid.cosmic.rocks/v1"
-	cosmicv1 "github.com/cosmicrocks/scdl8/pkg/apis/cosmic.rocks/v1"
+	cosmicrocksv1 "github.com/cosmicrocks/scdl8/pkg/apis/cosmic.rocks/v1"
 	"github.com/cosmicrocks/scdl8/pkg/util"
 	"github.com/cosmicrocks/scdl8/pkg/util/constants"
 	"github.com/cosmicrocks/scdl8/pkg/util/k8sutil"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func (c *Cluster) createStreams(appId string) (*cosmicv1.FabricEventStream, error) {
+func (c *Cluster) createStreams(appId string) (*cosmicrocksv1.FabricEventStream, error) {
 	c.setProcessName("creating streams")
 
 	fes := c.generateFabricEventStream(appId)
@@ -27,7 +27,7 @@ func (c *Cluster) createStreams(appId string) (*cosmicv1.FabricEventStream, erro
 	return streamCRD, nil
 }
 
-func (c *Cluster) updateStreams(newEventStreams *cosmicv1.FabricEventStream) error {
+func (c *Cluster) updateStreams(newEventStreams *cosmicrocksv1.FabricEventStream) error {
 	c.setProcessName("updating event streams")
 
 	if _, err := c.KubeClient.FabricEventStreams(newEventStreams.Namespace).Update(context.TODO(), newEventStreams, metav1.UpdateOptions{}); err != nil {
@@ -134,8 +134,8 @@ func (c *Cluster) syncPublication(publication, dbName string, tables map[string]
 	return nil
 }
 
-func (c *Cluster) generateFabricEventStream(appId string) *cosmicv1.FabricEventStream {
-	eventStreams := make([]cosmicv1.EventStream, 0)
+func (c *Cluster) generateFabricEventStream(appId string) *cosmicrocksv1.FabricEventStream {
+	eventStreams := make([]cosmicrocksv1.EventStream, 0)
 
 	for _, stream := range c.Spec.Streams {
 		if stream.ApplicationId != appId {
@@ -146,14 +146,14 @@ func (c *Cluster) generateFabricEventStream(appId string) *cosmicv1.FabricEventS
 			streamFlow := getEventStreamFlow(stream, table.PayloadColumn)
 			streamSink := getEventStreamSink(stream, table.EventType)
 
-			eventStreams = append(eventStreams, cosmicv1.EventStream{
+			eventStreams = append(eventStreams, cosmicrocksv1.EventStream{
 				EventStreamFlow:   streamFlow,
 				EventStreamSink:   streamSink,
 				EventStreamSource: streamSource})
 		}
 	}
 
-	return &cosmicv1.FabricEventStream{
+	return &cosmicrocksv1.FabricEventStream{
 		TypeMeta: metav1.TypeMeta{
 			APIVersion: constants.EventStreamCRDApiVersion,
 			Kind:       constants.EventStreamCRDKind,
@@ -167,17 +167,17 @@ func (c *Cluster) generateFabricEventStream(appId string) *cosmicv1.FabricEventS
 			// make cluster StatefulSet the owner (like with connection pooler objects)
 			OwnerReferences: c.ownerReferences(),
 		},
-		Spec: cosmicv1.FabricEventStreamSpec{
+		Spec: cosmicrocksv1.FabricEventStreamSpec{
 			ApplicationId: appId,
 			EventStreams:  eventStreams,
 		},
 	}
 }
 
-func (c *Cluster) getEventStreamSource(stream acidv1.Stream, tableName string, idColumn *string) cosmicv1.EventStreamSource {
+func (c *Cluster) getEventStreamSource(stream acidv1.Stream, tableName string, idColumn *string) cosmicrocksv1.EventStreamSource {
 	table, schema := getTableSchema(tableName)
 	streamFilter := stream.Filter[tableName]
-	return cosmicv1.EventStreamSource{
+	return cosmicrocksv1.EventStreamSource{
 		Type:             constants.EventStreamSourcePGType,
 		Schema:           schema,
 		EventStreamTable: getOutboxTable(table, idColumn),
@@ -189,15 +189,15 @@ func (c *Cluster) getEventStreamSource(stream acidv1.Stream, tableName string, i
 	}
 }
 
-func getEventStreamFlow(stream acidv1.Stream, payloadColumn *string) cosmicv1.EventStreamFlow {
-	return cosmicv1.EventStreamFlow{
+func getEventStreamFlow(stream acidv1.Stream, payloadColumn *string) cosmicrocksv1.EventStreamFlow {
+	return cosmicrocksv1.EventStreamFlow{
 		Type:          constants.EventStreamFlowPgGenericType,
 		PayloadColumn: payloadColumn,
 	}
 }
 
-func getEventStreamSink(stream acidv1.Stream, eventType string) cosmicv1.EventStreamSink {
-	return cosmicv1.EventStreamSink{
+func getEventStreamSink(stream acidv1.Stream, eventType string) cosmicrocksv1.EventStreamSink {
+	return cosmicrocksv1.EventStreamSink{
 		Type:         constants.EventStreamSinkNakadiType,
 		EventType:    eventType,
 		MaxBatchSize: stream.BatchSize,
@@ -215,8 +215,8 @@ func getTableSchema(fullTableName string) (tableName, schemaName string) {
 	return tableName, schemaName
 }
 
-func getOutboxTable(tableName string, idColumn *string) cosmicv1.EventStreamTable {
-	return cosmicv1.EventStreamTable{
+func getOutboxTable(tableName string, idColumn *string) cosmicrocksv1.EventStreamTable {
+	return cosmicrocksv1.EventStreamTable{
 		Name:     tableName,
 		IDColumn: idColumn,
 	}
@@ -226,12 +226,12 @@ func getSlotName(dbName, appId string) string {
 	return fmt.Sprintf("%s_%s_%s", constants.EventStreamSourceSlotPrefix, dbName, strings.Replace(appId, "-", "_", -1))
 }
 
-func (c *Cluster) getStreamConnection(database, user, appId string) cosmicv1.Connection {
-	return cosmicv1.Connection{
+func (c *Cluster) getStreamConnection(database, user, appId string) cosmicrocksv1.Connection {
+	return cosmicrocksv1.Connection{
 		Url:        fmt.Sprintf("jdbc:postgresql://%s.%s/%s?user=%s&ssl=true&sslmode=require", c.Name, c.Namespace, database, user),
 		SlotName:   getSlotName(database, appId),
 		PluginType: constants.EventStreamSourcePluginType,
-		DBAuth: cosmicv1.DBAuth{
+		DBAuth: cosmicrocksv1.DBAuth{
 			Type:        constants.EventStreamSourceAuthType,
 			Name:        c.credentialSecretNameForCluster(user, c.Name),
 			UserKey:     "username",
@@ -370,7 +370,7 @@ func (c *Cluster) createOrUpdateStreams() error {
 	return nil
 }
 
-func sameStreams(curEventStreams, newEventStreams []cosmicv1.EventStream) (match bool, reason string) {
+func sameStreams(curEventStreams, newEventStreams []cosmicrocksv1.EventStream) (match bool, reason string) {
 	if len(newEventStreams) != len(curEventStreams) {
 		return false, "number of defined streams is different"
 	}
