@@ -29,3 +29,5 @@ type OperatorConfigurationExpansion interface{}
 type PostgresTeamExpansion interface{}
 
 type PostgresqlExpansion interface{}
+
+type WorkLoadScheduleExpansion interface{}

@@ -37,6 +37,7 @@ type AcidV1Interface interface {
 	OperatorConfigurationsGetter
 	PostgresTeamsGetter
 	PostgresqlsGetter
+	WorkLoadSchedulesGetter
 }
 
 // AcidV1Client is used to interact with features provided by the acid.cosmic.rocks group.
@@ -54,6 +55,10 @@ func (c *AcidV1Client) PostgresTeams(namespace string) PostgresTeamInterface {
 
 func (c *AcidV1Client) Postgresqls(namespace string) PostgresqlInterface {
 	return newPostgresqls(c, namespace)
+}
+
+func (c *AcidV1Client) WorkLoadSchedules(namespace string) WorkLoadScheduleInterface {
+	return newWorkLoadSchedules(c, namespace)
 }
 
 // NewForConfig creates a new AcidV1Client for the given config.

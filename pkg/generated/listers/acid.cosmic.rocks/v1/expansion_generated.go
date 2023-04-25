@@ -39,3 +39,11 @@ type PostgresqlListerExpansion interface{}
 // PostgresqlNamespaceListerExpansion allows custom methods to be added to
 // PostgresqlNamespaceLister.
 type PostgresqlNamespaceListerExpansion interface{}
+
+// WorkLoadScheduleListerExpansion allows custom methods to be added to
+// WorkLoadScheduleLister.
+type WorkLoadScheduleListerExpansion interface{}
+
+// WorkLoadScheduleNamespaceListerExpansion allows custom methods to be added to
+// WorkLoadScheduleNamespaceLister.
+type WorkLoadScheduleNamespaceListerExpansion interface{}

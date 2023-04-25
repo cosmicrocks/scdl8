@@ -46,6 +46,10 @@ func (c *FakeAcidV1) Postgresqls(namespace string) v1.PostgresqlInterface {
 	return &FakePostgresqls{c, namespace}
 }
 
+func (c *FakeAcidV1) WorkLoadSchedules(namespace string) v1.WorkLoadScheduleInterface {
+	return &FakeWorkLoadSchedules{c, namespace}
+}
+
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
 func (c *FakeAcidV1) RESTClient() rest.Interface {

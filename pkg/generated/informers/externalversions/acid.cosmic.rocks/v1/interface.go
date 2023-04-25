@@ -34,6 +34,8 @@ type Interface interface {
 	PostgresTeams() PostgresTeamInformer
 	// Postgresqls returns a PostgresqlInformer.
 	Postgresqls() PostgresqlInformer
+	// WorkLoadSchedules returns a WorkLoadScheduleInformer.
+	WorkLoadSchedules() WorkLoadScheduleInformer
 }
 
 type version struct {
@@ -55,4 +57,9 @@ func (v *version) PostgresTeams() PostgresTeamInformer {
 // Postgresqls returns a PostgresqlInformer.
 func (v *version) Postgresqls() PostgresqlInformer {
 	return &postgresqlInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// WorkLoadSchedules returns a WorkLoadScheduleInformer.
+func (v *version) WorkLoadSchedules() WorkLoadScheduleInformer {
+	return &workLoadScheduleInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

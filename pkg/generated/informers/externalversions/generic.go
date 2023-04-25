@@ -64,6 +64,8 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Acid().V1().PostgresTeams().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("postgresqls"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Acid().V1().Postgresqls().Informer()}, nil
+	case v1.SchemeGroupVersion.WithResource("workloadschedules"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Acid().V1().WorkLoadSchedules().Informer()}, nil
 
 		// Group=cosmic.rocks, Version=v1
 	case cosmicrocksv1.SchemeGroupVersion.WithResource("fabriceventstreams"):
